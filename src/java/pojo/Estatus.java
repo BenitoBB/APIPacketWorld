@@ -1,0 +1,47 @@
+package pojo;
+
+/**
+ *
+ * @authors Ohana & Benito
+ */
+public class Estatus {
+
+    private int idEstatus;
+    private String nombre;
+    private String descripcion;
+
+    public Estatus() {
+    }
+
+    public Estatus(int idEstatus, String nombre, String descripcion) {
+        this.idEstatus = idEstatus;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+
+    public void setIdEstatus(int idEstatus) {
+        this.idEstatus = idEstatus;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public int getIdEstatus() {
+        return idEstatus;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+    
+    
+}
