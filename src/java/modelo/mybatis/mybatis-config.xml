@@ -18,6 +18,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     </environments>
 
     <mappers>
-        <mapper resource="modelo/mybatis/mapper/.xml"/>
+        <mapper resource="modelo/mybatis/mapper/CatalogoMapper.xml"/>
     </mappers>
 </configuration>
