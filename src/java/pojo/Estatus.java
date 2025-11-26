@@ -6,20 +6,20 @@ package pojo;
  */
 public class Estatus {
 
-    private int idEstatus;
+    private Integer idEstatus;
     private String nombre;
     private String descripcion;
 
     public Estatus() {
     }
 
-    public Estatus(int idEstatus, String nombre, String descripcion) {
+    public Estatus(Integer idEstatus, String nombre, String descripcion) {
         this.idEstatus = idEstatus;
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
 
-    public void setIdEstatus(int idEstatus) {
+    public void setIdEstatus(Integer idEstatus) {
         this.idEstatus = idEstatus;
     }
 
@@ -31,7 +31,7 @@ public class Estatus {
         this.descripcion = descripcion;
     }
 
-    public int getIdEstatus() {
+    public Integer getIdEstatus() {
         return idEstatus;
     }
 
@@ -42,6 +42,5 @@ public class Estatus {
     public String getDescripcion() {
         return descripcion;
     }
-    
-    
+
 }

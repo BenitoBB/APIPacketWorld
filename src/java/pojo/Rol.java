@@ -6,18 +6,18 @@ package pojo;
  */
 public class Rol {
 
-    private int idRol;
+    private Integer idRol;
     private String nombre;
 
     public Rol() {
     }
 
-    public Rol(int idRol, String nombre) {
+    public Rol(Integer idRol, String nombre) {
         this.idRol = idRol;
         this.nombre = nombre;
     }
 
-    public void setIdRol(int idRol) {
+    public void setIdRol(Integer idRol) {
         this.idRol = idRol;
     }
 
@@ -25,7 +25,7 @@ public class Rol {
         this.nombre = nombre;
     }
 
-    public int getIdRol() {
+    public Integer getIdRol() {
         return idRol;
     }
 

@@ -6,7 +6,7 @@ package pojo;
  */
 public class Direccion {
 
-    private int idDireccion;
+    private Integer idDireccion;
     private String calle;
     private String numero;
     private String colonia;
@@ -17,7 +17,7 @@ public class Direccion {
     public Direccion() {
     }
 
-    public Direccion(int idDireccion, String calle, String numero, String colonia, String codigoPostal, String ciudad, String estado) {
+    public Direccion(Integer idDireccion, String calle, String numero, String colonia, String codigoPostal, String ciudad, String estado) {
         this.idDireccion = idDireccion;
         this.calle = calle;
         this.numero = numero;
@@ -27,7 +27,7 @@ public class Direccion {
         this.estado = estado;
     }
 
-    public void setIdDireccion(int idDireccion) {
+    public void setIdDireccion(Integer idDireccion) {
         this.idDireccion = idDireccion;
     }
 
@@ -55,7 +55,7 @@ public class Direccion {
         this.estado = estado;
     }
 
-    public int getIdDireccion() {
+    public Integer getIdDireccion() {
         return idDireccion;
     }
 
@@ -82,7 +82,5 @@ public class Direccion {
     public String getEstado() {
         return estado;
     }
-    
-    
 
 }
