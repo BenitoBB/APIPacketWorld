@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="unidad">
+
+    <!-- ====================================================== -->
+    <!-- INSERTAR UNIDAD                                         -->
+    <!-- ====================================================== -->
+    <insert id="insertar-unidad" parameterType="pojo.Unidad">
+        INSERT INTO Unidad( 
+        marca, modelo, anio, vin, tipoUnidad, numeroIdentificacionInterno, estatus 
+        ) 
+        VALUES( 
+        #{marca}, #{modelo}, #{anio}, #{vin}, #{tipoUnidad}, #{numeroIdentificacionInterno}, 
+        'Activa'
+        )
+    </insert>
+
+    <!-- ====================================================== -->
+    <!-- ACTUALIZAR UNIDAD (SIN VIN)                             -->
+    <!-- ====================================================== -->
+    <update id="actualizar-unidad" parameterType="pojo.Unidad">
+        UPDATE Unidad 
+        SET 
+        marca = #{marca}, modelo = #{modelo}, anio = #{anio}, 
+        tipoUnidad = #{tipoUnidad}, numeroIdentificacionInterno = #{numeroIdentificacionInterno} 
+        WHERE idUnidad = #{idUnidad} 
+    </update>
+
+    <!-- ====================================================== -->
+    <!-- DAR DE BAJA UNIDAD                                      -->
+    <!-- ====================================================== -->
+    <update id="dar-baja-unidad" parameterType="map">
+        UPDATE Unidad 
+        SET  
+        estatus = 'Inactiva', 
+        motivoBaja = #{motivoBaja} 
+        WHERE idUnidad = #{idUnidad} 
+    </update>
+
+    <!-- ====================================================== -->
+    <!-- BUSCAR POR VIN                                          -->
+    <!-- ====================================================== -->
+    <select id="buscar-por-vin" parameterType="string" resultType="pojo.Unidad">
+        SELECT * 
+        FROM Unidad 
+        WHERE vin = #{vin} 
+    </select>
+
+    <!-- ====================================================== -->
+    <!-- BUSCAR POR MARCA                                        -->
+    <!-- ====================================================== -->
+    <select id="buscar-por-marca" parameterType="string" resultType="pojo.Unidad">
+        SELECT * 
+        FROM Unidad 
+        WHERE marca LIKE CONCAT('%', #{_parameter}, '%') 
+    </select>
+
+    <!-- ====================================================== -->
+    <!-- BUSCAR POR NII (Número Identificación Interno)          -->
+    <!-- ====================================================== -->
+    <select id="buscar-por-nii" parameterType="string" resultType="pojo.Unidad">
+        SELECT * 
+        FROM Unidad 
+        WHERE numeroIdentificacionInterno LIKE CONCAT('%', #{_parameter}, '%')
+    </select>
+</mapper>
