@@ -1,8 +1,11 @@
 package dominio;
 
 import dto.RSColaborador;
+import dto.Respuesta;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Colaborador;
@@ -13,7 +16,8 @@ import pojo.Colaborador;
  */
 public class ColaboradorImp {
 
-        public static RSColaborador autenticarAdministracion(String noPersonal, String password) {
+    // Login
+    public static RSColaborador autenticarAdministracion(String noPersonal, String password) {
         RSColaborador respuesta = new RSColaborador();
         SqlSession conexionBD = MyBatisUtil.getSession();
 
@@ -52,4 +56,259 @@ public class ColaboradorImp {
 
         return respuesta;
     }
+
+    // Insertar 
+    public static RSColaborador insertarColaborador(Colaborador colaborador) {
+        RSColaborador respuesta = new RSColaborador();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                int filas = conexionBD.insert("colaborador.insertar-colaborador", colaborador);
+                conexionBD.commit();
+
+                if (filas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Colaborador registrado correctamente.");
+                    respuesta.setColaborador(colaborador);
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("No se pudo registrar el Colaborador.");
+                }
+            } catch (Exception ex) {
+                respuesta.setError(true);
+                respuesta.setMensaje(ex.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje("No hay conexion.");
+        }
+        return respuesta;
+    }
+
+    // Actualizar 
+    public static RSColaborador actualizarColaborador(Colaborador colaborador) {
+        RSColaborador respuesta = new RSColaborador();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                int filas = conexionBD.update("colaborador.actualizar-colaborador", colaborador);
+                conexionBD.commit();
+
+                if (filas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Colaborador actualizado.");
+                    respuesta.setColaborador(colaborador);
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("No se encontró el Colaborador.");
+                }
+            } catch (Exception ex) {
+                respuesta.setError(true);
+                respuesta.setMensaje(ex.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje("Sin conexion");
+        }
+        return respuesta;
+    }
+
+    // Eliminar
+    public static Respuesta eliminarColaborador(int idColaborador) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                int filas = conexionBD.delete("colaborador.eliminar-colaborador", idColaborador);
+                conexionBD.commit();
+
+                if (filas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Colaborador eliminado correctamente.");
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("No se encontro el Colaborador.");
+                }
+            } catch (Exception ex) {
+                respuesta.setError(true);
+                respuesta.setMensaje(ex.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje("Sin Conexion.");
+        }
+        return respuesta;
+    }
+
+    // Buscar por Nombre 
+    public static List<Colaborador> buscarPorNombre(String nombre) {
+        List<Colaborador> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("colaborador.buscar-por-nombre", nombre);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return lista;
+    }
+
+    // Buscar por NoPersonal
+    public static Colaborador buscarPorNoPersonal(String noPersonal) {
+        Colaborador col = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                col = conexionBD.selectOne("colaborador.buscar-por-noPersonal", noPersonal);
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return col;
+    }
+
+    // Buscar por Rol
+    public static List<Colaborador> buscarPorRol(int idRol) {
+        List<Colaborador> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("colaborador.buscar-por-rol", idRol);
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return lista;
+    }
+
+    // Actualizar Perfil (Móvil)
+    public static RSColaborador actualizarPerfil(Colaborador colaborador) {
+        RSColaborador respuesta = new RSColaborador();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+
+            try {
+                int filas = conexionBD.update("colaborador.actualizar-perfil", colaborador);
+                conexionBD.commit();
+
+                if (filas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Perfil actualizado.");
+                    respuesta.setColaborador(colaborador);
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("No se encontró el colaborador.");
+                }
+
+            } catch (Exception ex) {
+                respuesta.setError(true);
+                respuesta.setMensaje(ex.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje("Sin conexión.");
+        }
+
+        return respuesta;
+    }
+
+    // Asignar Unidad a Conductor 
+    public static Respuesta asignarUnidad(int idColaborador, int idUnidad) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+
+            try {
+                HashMap<String, Object> params = new HashMap<>();
+                params.put("idColaborador", idColaborador);
+                params.put("idUnidad", idUnidad);
+
+                // Cerrar asignación previa
+                conexionBD.update("colaborador.cerrar-historial-conductor-unidad", params);
+
+                // Insertar nueva asignación
+                conexionBD.insert("colaborador.insertar-historial-conductor-unidad", params);
+
+                conexionBD.commit();
+
+                respuesta.setError(false);
+                respuesta.setMensaje("Unidad asignada correctamente.");
+
+            } catch (Exception ex) {
+                respuesta.setError(true);
+                respuesta.setMensaje(ex.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje("Sin conexión.");
+        }
+        return respuesta;
+    }
+    
+    // Desasignar Unidad de Conductor
+    public static Respuesta desasignarUnidad(int idColaborador) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+
+                // Verificar si existe asignación activa
+                Integer asignacionActiva = conexionBD.selectOne(
+                        "colaborador.obtener-asignacion-activa", idColaborador);
+
+                if (asignacionActiva == null) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("El conductor no tiene una unidad asignada.");
+                    return respuesta;
+                }
+
+                // Cerrar historial
+                conexionBD.update("colaborador.cerrar-historial-conductor-unidad",
+                        new HashMap<String, Object>() {
+                    {
+                        put("idColaborador", idColaborador);
+                    }
+                });
+
+                conexionBD.commit();
+
+                respuesta.setError(false);
+                respuesta.setMensaje("Unidad desasignada correctamente.");
+
+            } catch (Exception ex) {
+                respuesta.setError(true);
+                respuesta.setMensaje(ex.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje("Sin conexión.");
+        }
+
+        return respuesta;
+    }
+
 }
