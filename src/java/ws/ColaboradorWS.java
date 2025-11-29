@@ -112,33 +112,4 @@ public class ColaboradorWS {
 
         throw new BadRequestException("Datos insuficientes para actualizar perfil.");
     }
-
-    // Asignar Unidad a Conductor
-    @Path("asignar-unidad/{idColaborador}/{idUnidad}") 
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta asignarUnidad(
-            @PathParam("idColaborador") Integer idColaborador,
-            @PathParam("idUnidad") Integer idUnidad) {
-
-        if (idColaborador != null && idUnidad != null) {
-            return ColaboradorImp.asignarUnidad(idColaborador, idUnidad);
-        }
-
-        throw new BadRequestException("Datos incompletos para asignación.");
-    }
-
-    // Desasignar Unidad de Conductor
-    @Path("desasignar-unidad/{idColaborador}")
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta desasignarUnidad(@PathParam("idColaborador") Integer idColaborador) {
-
-        if (idColaborador != null) {
-            return ColaboradorImp.desasignarUnidad(idColaborador);
-        }
-
-        throw new BadRequestException("Falta idColaborador para desasignar.");
-    }
-
 }

@@ -91,36 +91,6 @@
     </update>
 
     <!-- ============================= -->
-    <!-- HISTORIAL UNIDAD-CONDUCTOR    -->
-    <!-- ============================= -->
-    <insert id="insertar-historial-conductor-unidad" parameterType="map">
-        INSERT INTO ConductorUnidad ( 
-        idColaborador, idUnidad, fechaAsignacion, activo 
-        ) 
-        VALUES ( 
-        #{idColaborador}, #{idUnidad}, NOW(), 1 
-        ) 
-    </insert>
-
-    <update id="cerrar-historial-conductor-unidad" parameterType="map">
-        UPDATE ConductorUnidad 
-        SET activo = 0, 
-        fechaDesasignacion = NOW() 
-        WHERE idColaborador = #{idColaborador} 
-        AND activo = 1
-    </update>
-    
-    <!-- OBTENER ASIGNACIÓN ACTIVA -->
-    <select id="obtener-asignacion-activa" parameterType="int" resultType="int">
-        SELECT idConductorUnidad 
-        FROM ConductorUnidad 
-        WHERE idColaborador = #{idColaborador} 
-        AND activo = 1 
-        LIMIT 1 
-    </select>
-
-
-    <!-- ============================= -->
     <!-- LOGIN                         -->
     <!-- ============================= -->
     <select id="login-colaborador" parameterType="map" resultType="pojo.Colaborador">
