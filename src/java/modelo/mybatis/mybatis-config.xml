@@ -23,5 +23,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         <mapper resource="modelo/mybatis/mapper/UnidadMapper.xml"/>
         <mapper resource="modelo/mybatis/mapper/ConductorUnidadMapper.xml"/>
         <mapper resource="modelo/mybatis/mapper/DireccionMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/SucursalMapper.xml"/>
     </mappers>
 </configuration>
