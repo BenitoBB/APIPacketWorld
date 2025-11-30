@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cliente">
+
+    <!-- ====================================================== -->
+    <!-- INSERTAR CLIENTE                                       -->
+    <!-- ====================================================== -->
+    <insert id="insertar-cliente"
+            parameterType="pojo.Cliente"
+            useGeneratedKeys="true"
+            keyProperty="idCliente">
+        INSERT INTO Cliente ( 
+        nombre, apellidoPaterno, apellidoMaterno, telefono, correo, idDireccion  
+        ) VALUES ( 
+        #{nombre}, #{apellidoPaterno}, #{apellidoMaterno}, #{telefono}, #{correo}, #{idDireccion}
+        )
+    </insert>
+
+    <!-- ====================================================== -->
+    <!-- ACTUALIZAR CLIENTE                                     -->
+    <!-- ====================================================== -->
+    <update id="actualizar-cliente" parameterType="pojo.Cliente">
+        UPDATE Cliente SET 
+        nombre = #{nombre}, 
+        apellidoPaterno = #{apellidoPaterno}, 
+        apellidoMaterno = #{apellidoMaterno}, 
+        telefono = #{telefono}, 
+        correo = #{correo}, 
+        idDireccion = #{idDireccion} 
+        WHERE idCliente = #{idCliente}
+    </update>
+
+    <!-- ====================================================== -->
+    <!-- ELIMINAR CLIENTE                                       -->
+    <!-- ====================================================== -->
+    <delete id="eliminar-cliente" parameterType="int">
+        DELETE FROM Cliente 
+        WHERE idCliente = #{idCliente} 
+    </delete>
+
+    <!-- ====================================================== -->
+    <!-- BUSCAR CLIENTE POR NOMBRE                              -->
+    <!-- ====================================================== -->
+    <select id="buscar-por-nombre" parameterType="string" resultType="pojo.Cliente">
+        SELECT * 
+        FROM Cliente 
+        WHERE nombre LIKE CONCAT('%', #{param}, '%') 
+        OR apellidoPaterno LIKE CONCAT('%', #{param}, '%') 
+        OR apellidoMaterno LIKE CONCAT('%', #{param}, '%')
+    </select>
+
+    <!-- ====================================================== -->
+    <!-- BUSCAR CLIENTE POR TELÉFONO                            -->
+    <!-- ====================================================== -->
+    <select id="buscar-por-telefono" parameterType="string" resultType="pojo.Cliente">
+        SELECT * 
+        FROM Cliente 
+        WHERE telefono LIKE CONCAT('%', #{param}, '%')
+    </select>
+
+    <!-- ====================================================== -->
+    <!-- BUSCAR CLIENTE POR CORREO                              -->
+    <!-- ====================================================== -->
+    <select id="buscar-por-correo" parameterType="string" resultType="pojo.Cliente">
+        SELECT * 
+        FROM Cliente 
+        WHERE correo LIKE CONCAT('%', #{param}, '%')
+    </select>
+</mapper>

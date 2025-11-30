@@ -27,6 +27,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(ws.CatalogoWS.class);
+        resources.add(ws.ClienteWS.class);
         resources.add(ws.ColaboradorWS.class);
         resources.add(ws.ConductorUnidadWS.class);
         resources.add(ws.DireccionWS.class);
