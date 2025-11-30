@@ -29,6 +29,7 @@ public class ApplicationConfig extends Application {
         resources.add(ws.CatalogoWS.class);
         resources.add(ws.ColaboradorWS.class);
         resources.add(ws.ConductorUnidadWS.class);
+        resources.add(ws.DireccionWS.class);
         resources.add(ws.UnidadWS.class);
     }
     
