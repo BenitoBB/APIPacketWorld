@@ -57,14 +57,20 @@ public class Mensajes {
 
     // UNIDAD 
     public static final String UNIDAD_REGISTRADA = "Unidad registrada correctamente.";
+    public static final String UNIDAD_NO_REGISTRADA = "No se pudo registrar la unidad.";
     public static final String UNIDAD_ACTUALIZADA = "Unidad actualizada correctamente.";
+    public static final String UNIDAD_NO_ACTUALIZADA = "No se pudo actualizar la unidad.";
     public static final String UNIDAD_BAJA = "Unidad dada de baja correctamente.";
+    public static final String UNIDAD_NO_BAJA = "No se pudo dar de baja la unidad.";
     public static final String UNIDAD_NO_EXISTE = "No existe la unidad solicitada.";
     public static final String UNIDAD_ERROR = "Error en operación de unidad: ";
 
     // CONDUCTOR-UNIDAD 
     public static final String ASIGNACION_REALIZADA = "Unidad asignada correctamente al conductor.";
+    public static final String ASIGNACION_NO_REALIZADA = "No se pudo asignar la unidad.";
     public static final String DESASIGNACION_REALIZADA = "Unidad desasignada correctamente.";
+    public static final String DESASIGNACION_NO_REALIZADA = "No se encontró asignación activa.";
     public static final String ASIGNACION_ERROR = "Error en asignación/desasignación de unidad: ";
+    public static final String ASIGNACION_EXISTE = "El conductor ya tiene una unidad asignada.";
     public static final String ASIGNACION_NO_EXISTE = "No se encontró la asignación.";
 }
