@@ -6,6 +6,7 @@ import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Sucursal;
+import utilidades.Mensajes;
 
 /**
  *
@@ -25,23 +26,23 @@ public class SucursalImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Sucursal registrada correctamente.");
+                    respuesta.setMensaje(Mensajes.SUCURSAL_REGISTRADA);
                     respuesta.setSucursal(sucursal);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo registrar la sucursal.");
+                    respuesta.setMensaje(Mensajes.SUCURSAL_NO_REGISTRADA);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.SUCURSAL_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
 
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;

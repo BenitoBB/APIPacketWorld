@@ -3,12 +3,12 @@ package dominio;
 import dto.RSColaborador;
 import dto.Respuesta;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Colaborador;
+import utilidades.Mensajes;
 
 /**
  *
@@ -34,11 +34,11 @@ public class ColaboradorImp {
                 if (colaborador != null) {
                     // Si se encontró el colaborador, asignamos los datos a la respuesta
                     respuesta.setError(false);
-                    respuesta.setMensaje("Autenticación correcta" + " " + colaborador.getNombre());
+                    respuesta.setMensaje(Mensajes.COLABORADOR_LOGUEADO + colaborador.getNombre());
                     respuesta.setColaborador(colaborador);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("Usuario o contraseña incorrectos.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_ERROR_CREDENCIALES);
                 }
 
             } catch (Exception e) {
@@ -51,7 +51,7 @@ public class ColaboradorImp {
         } else {
             // Sin conexión
             respuesta.setError(true);
-            respuesta.setMensaje("Lo sentimos, por el momento no hay conexión a los datos...");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
@@ -68,11 +68,11 @@ public class ColaboradorImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Colaborador registrado correctamente.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_REGISTRADO);
                     respuesta.setColaborador(colaborador);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo registrar el Colaborador.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_NO_REGISTRADO);
                 }
             } catch (Exception ex) {
                 respuesta.setError(true);
@@ -82,7 +82,7 @@ public class ColaboradorImp {
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("No hay conexion.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
         return respuesta;
     }
@@ -99,11 +99,11 @@ public class ColaboradorImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Colaborador actualizado.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_ACTUALIZADO);
                     respuesta.setColaborador(colaborador);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró el Colaborador.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_NO_ACTUALIZADO);
                 }
             } catch (Exception ex) {
                 respuesta.setError(true);
@@ -113,7 +113,7 @@ public class ColaboradorImp {
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexion");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
         return respuesta;
     }
@@ -130,10 +130,10 @@ public class ColaboradorImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Colaborador eliminado correctamente.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_ELIMINADO);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se encontro el Colaborador.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_NO_ELIMINADO);
                 }
             } catch (Exception ex) {
                 respuesta.setError(true);
@@ -143,7 +143,7 @@ public class ColaboradorImp {
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin Conexion.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
         return respuesta;
     }
@@ -209,11 +209,11 @@ public class ColaboradorImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Perfil actualizado.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_PERFIL_ACTUALIZADO);
                     respuesta.setColaborador(colaborador);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró el colaborador.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_PERFIL_NO_ACTUALIZADO);
                 }
 
             } catch (Exception ex) {
@@ -224,7 +224,7 @@ public class ColaboradorImp {
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;

@@ -6,6 +6,7 @@ import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Cliente;
+import utilidades.Mensajes;
 
 /**
  *
@@ -25,23 +26,23 @@ public class ClienteImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Cliente registrado correctamente.");
+                    respuesta.setMensaje(Mensajes.CLIENTE_REGISTRADO);
                     respuesta.setCliente(cliente);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo registrar el cliente.");
+                    respuesta.setMensaje(Mensajes.CLIENTE_NO_REGISTRADO);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al registrar cliente: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.CLIENTE_ERROR_REGISTRAR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
 
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
@@ -60,22 +61,22 @@ public class ClienteImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Cliente actualizado correctamente.");
+                    respuesta.setMensaje(Mensajes.CLIENTE_ACTUALIZADO);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No existe el cliente a actualizar.");
+                    respuesta.setMensaje(Mensajes.CLIENTE_NO_ACTUALIZADO);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al actualizar cliente: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.CLIENTE_ERROR_ACTUALIZAR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
 
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
@@ -94,22 +95,22 @@ public class ClienteImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Cliente eliminado correctamente.");
+                    respuesta.setMensaje(Mensajes.CLIENTE_ELIMINADO);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No existe un cliente con ese ID.");
+                    respuesta.setMensaje(Mensajes.CLIENTE_NO_ELIMINADO);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al eliminar cliente: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.CLIENTE_ERROR_ELIMINAR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
 
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;

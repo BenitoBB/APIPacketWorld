@@ -6,6 +6,7 @@ import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Direccion;
+import utilidades.Mensajes;
 
 /**
  *
@@ -25,11 +26,11 @@ public class DireccionImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Dirección registrada correctamente.");
+                    respuesta.setMensaje(Mensajes.DIRECCION_REGISTRADA);
                     respuesta.setDireccion(direccion); // contiene idDireccion generado
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo registrar la dirección.");
+                    respuesta.setMensaje(Mensajes.DIRECCION_NO_REGISTRADA);
                 }
 
             } catch (Exception ex) {
@@ -58,21 +59,21 @@ public class DireccionImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Dirección actualizada correctamente.");
+                    respuesta.setMensaje(Mensajes.DIRECCION_ACTUALIZADA);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró la dirección a actualizar.");
+                    respuesta.setMensaje(Mensajes.DIRECCION_NO_ACTUALIZADA);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.DIRECCION_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
@@ -89,22 +90,22 @@ public class DireccionImp {
 
                 if (dir != null) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Dirección encontrada.");
+                    respuesta.setMensaje(Mensajes.DIRECCION_ENCONTRADA);
                     respuesta.setDireccion(dir);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No existe una dirección con ese ID.");
+                    respuesta.setMensaje(Mensajes.DIRECCION_NO_ENCONTRADA);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.DIRECCION_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
