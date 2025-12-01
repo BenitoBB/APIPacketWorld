@@ -41,9 +41,9 @@ public class ColaboradorImp {
                     respuesta.setMensaje(Mensajes.COLABORADOR_ERROR_CREDENCIALES);
                 }
 
-            } catch (Exception e) {
+            } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje(e.getMessage());
+                respuesta.setMensaje(Mensajes.COLABORADOR_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close(); // Cerramos la sesión siempre
             }
@@ -76,7 +76,7 @@ public class ColaboradorImp {
                 }
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje(ex.getMessage());
+                respuesta.setMensaje(Mensajes.COLABORADOR_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
@@ -107,7 +107,7 @@ public class ColaboradorImp {
                 }
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje(ex.getMessage());
+                respuesta.setMensaje(Mensajes.COLABORADOR_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
@@ -137,7 +137,7 @@ public class ColaboradorImp {
                 }
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje(ex.getMessage());
+                respuesta.setMensaje(Mensajes.COLABORADOR_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
@@ -218,7 +218,7 @@ public class ColaboradorImp {
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje(ex.getMessage());
+                respuesta.setMensaje(Mensajes.COLABORADOR_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
