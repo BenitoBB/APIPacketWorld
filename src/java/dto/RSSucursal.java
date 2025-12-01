@@ -1,24 +1,24 @@
 package dto;
 
-import pojo.Colaborador;
+import pojo.Sucursal;
 
 /**
  *
  * @authors Ohana & Benito
  */
-public class RSColaborador {
+public class RSSucursal {
 
     private boolean error;
     private String mensaje;
-    private Colaborador colaborador;
+    private Sucursal sucursal;
 
-    public RSColaborador() {
+    public RSSucursal() {
     }
 
-    public RSColaborador(boolean error, String mensaje, Colaborador colaborador) {
+    public RSSucursal(boolean error, String mensaje, Sucursal sucursal) {
         this.error = error;
         this.mensaje = mensaje;
-        this.colaborador = colaborador;
+        this.sucursal = sucursal;
     }
 
     public void setError(boolean error) {
@@ -29,8 +29,8 @@ public class RSColaborador {
         this.mensaje = mensaje;
     }
 
-    public void setColaborador(Colaborador colaborador) {
-        this.colaborador = colaborador;
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
     }
 
     public boolean isError() {
@@ -41,10 +41,7 @@ public class RSColaborador {
         return mensaje;
     }
 
-    public Colaborador getColaborador() {
-        return colaborador;
+    public Sucursal getSucursal() {
+        return sucursal;
     }
-    
-    
-    
 }

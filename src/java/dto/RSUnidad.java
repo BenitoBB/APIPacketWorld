@@ -1,24 +1,24 @@
 package dto;
 
-import pojo.Colaborador;
+import pojo.Unidad;
 
 /**
  *
  * @authors Ohana & Benito
  */
-public class RSColaborador {
+public class RSUnidad {
 
     private boolean error;
     private String mensaje;
-    private Colaborador colaborador;
+    private Unidad unidad;
 
-    public RSColaborador() {
+    public RSUnidad() {
     }
 
-    public RSColaborador(boolean error, String mensaje, Colaborador colaborador) {
+    public RSUnidad(boolean error, String mensaje, Unidad unidad) {
         this.error = error;
         this.mensaje = mensaje;
-        this.colaborador = colaborador;
+        this.unidad = unidad;
     }
 
     public void setError(boolean error) {
@@ -29,8 +29,8 @@ public class RSColaborador {
         this.mensaje = mensaje;
     }
 
-    public void setColaborador(Colaborador colaborador) {
-        this.colaborador = colaborador;
+    public void setUnidad(Unidad unidad) {
+        this.unidad = unidad;
     }
 
     public boolean isError() {
@@ -41,10 +41,7 @@ public class RSColaborador {
         return mensaje;
     }
 
-    public Colaborador getColaborador() {
-        return colaborador;
+    public Unidad getUnidad() {
+        return unidad;
     }
-    
-    
-    
 }

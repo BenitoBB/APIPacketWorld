@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="direccion">
+
+    <!-- ====================================================== -->
+    <!-- INSERTAR DIRECCIÓN                                     -->
+    <!-- ====================================================== -->
+    <insert id="insertar"
+            parameterType="pojo.Direccion"
+            useGeneratedKeys="true" 
+            keyProperty="idDireccion">
+
+        INSERT INTO Direccion ( 
+        calle, numero, colonia, codigoPostal, ciudad, estado 
+        ) VALUES ( 
+        #{calle}, #{numero}, #{colonia}, #{codigoPostal}, #{ciudad}, #{estado} 
+        )
+    </insert>
+
+
+    <!-- ====================================================== -->
+    <!-- ACTUALIZAR DIRECCIÓN                                   -->
+    <!-- ====================================================== -->
+    <update id="actualizar" parameterType="pojo.Direccion">
+        UPDATE Direccion SET 
+        calle = #{calle}, 
+        numero = #{numero}, 
+        colonia = #{colonia}, 
+        codigoPostal = #{codigoPostal}, 
+        ciudad = #{ciudad}, 
+        estado = #{estado} 
+        WHERE idDireccion = #{idDireccion}
+    </update>
+
+
+    <!-- ====================================================== -->
+    <!-- OBTENER DIRECCIÓN POR ID                               -->
+    <!-- ====================================================== -->
+    <select id="obtener-por-id" 
+            parameterType="int" 
+            resultType="pojo.Direccion">
+
+        SELECT * 
+        FROM Direccion 
+        WHERE idDireccion = #{idDireccion} 
+    </select>
+
+
+    <!-- ====================================================== -->
+    <!-- BUSCAR DIRECCIÓN (uso general)                         -->
+    <!-- ====================================================== -->
+    <select id="buscar" 
+            parameterType="string" 
+            resultType="pojo.Direccion">
+
+        SELECT * 
+        FROM Direccion 
+        WHERE  
+        calle LIKE CONCAT('%', #{param}, '%') 
+        OR colonia LIKE CONCAT('%', #{param}, '%') 
+        OR ciudad LIKE CONCAT('%', #{param}, '%') 
+        OR estado LIKE CONCAT('%', #{param}, '%') 
+        OR codigoPostal LIKE CONCAT('%', #{param}, '%')
+    </select>
+
+</mapper>

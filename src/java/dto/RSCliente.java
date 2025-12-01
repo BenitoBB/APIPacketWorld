@@ -1,24 +1,24 @@
 package dto;
 
-import pojo.Colaborador;
+import pojo.Cliente;
 
 /**
  *
  * @authors Ohana & Benito
  */
-public class RSLoginColaborador {
+public class RSCliente {
     
     private boolean error;
     private String mensaje;
-    private Colaborador colaborador;
+    private Cliente cliente;
 
-    public RSLoginColaborador() {
+    public RSCliente() {
     }
 
-    public RSLoginColaborador(boolean error, String mensaje, Colaborador colaborador) {
+    public RSCliente(boolean error, String mensaje, Cliente cliente) {
         this.error = error;
         this.mensaje = mensaje;
-        this.colaborador = colaborador;
+        this.cliente = cliente;
     }
 
     public void setError(boolean error) {
@@ -29,8 +29,8 @@ public class RSLoginColaborador {
         this.mensaje = mensaje;
     }
 
-    public void setColaborador(Colaborador colaborador) {
-        this.colaborador = colaborador;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public boolean isError() {
@@ -41,9 +41,7 @@ public class RSLoginColaborador {
         return mensaje;
     }
 
-    public Colaborador getColaborador() {
-        return colaborador;
+    public Cliente getCliente() {
+        return cliente;
     }
-    
-    
 }

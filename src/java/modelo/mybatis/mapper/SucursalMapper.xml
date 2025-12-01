@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sucursal">
+
+    <!-- ====================================================== -->
+    <!-- INSERTAR SUCURSAL                                      -->
+    <!-- ====================================================== -->
+    <insert id="insertar-sucursal"
+            parameterType="pojo.Sucursal"
+            useGeneratedKeys="true"
+            keyProperty="idSucursal">
+
+        INSERT INTO Sucursal ( 
+        codigo, nombre, estatus, idDireccion 
+        ) VALUES ( 
+        #{codigo}, #{nombre}, #{estatus}, #{idDireccion}
+        )
+    </insert>
+
+
+    <!-- ====================================================== -->
+    <!-- ACTUALIZAR SUCURSAL (NO cambia código NI estatus)      -->
+    <!-- ====================================================== -->
+    <update id="actualizar-sucursal"
+            parameterType="pojo.Sucursal">
+
+        UPDATE Sucursal SET 
+        nombre = #{nombre}, 
+        idDireccion = #{idDireccion} 
+        WHERE idSucursal = #{idSucursal} 
+    </update>
+
+
+    <!-- ====================================================== -->
+    <!-- DAR DE BAJA SUCURSAL (estatus = Inactiva)              -->
+    <!-- ====================================================== -->
+    <update id="dar-de-baja-sucursal"
+            parameterType="int">
+
+        UPDATE Sucursal 
+        SET estatus = 'Inactiva' 
+        WHERE idSucursal = #{idSucursal} 
+    </update>
+
+
+    <!-- ====================================================== -->
+    <!-- OBTENER SUCURSAL POR ID                                -->
+    <!-- ====================================================== -->
+    <select id="obtener-sucursal-por-id"
+            parameterType="int"
+            resultType="pojo.Sucursal">
+
+        SELECT * 
+        FROM Sucursal 
+        WHERE idSucursal = #{idSucursal}
+    </select>
+
+
+    <!-- ====================================================== -->
+    <!-- BUSCAR SUCURSAL (por código o nombre)                  -->
+    <!-- ====================================================== -->
+    <select id="buscar-sucursal"
+            parameterType="string"
+            resultType="pojo.Sucursal">
+
+        SELECT * 
+        FROM Sucursal 
+        WHERE  codigo LIKE CONCAT('%', #{param}, '%') 
+        OR     nombre LIKE CONCAT('%', #{param}, '%')
+    </select>
+</mapper>

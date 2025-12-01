@@ -37,9 +37,9 @@
     <select id="obtener-unidades-activas" resultType="pojo.Unidad">
         SELECT idUnidad, marca, modelo, anio, vin, 
                tipoUnidad, numeroIdentificacionInterno, 
-               estatus, motivoBaja, idColaborador 
+               estatus, motivoBaja  
         FROM Unidad 
-        WHERE estatus = 'Activa'
+        WHERE estatus = 'Activa' 
     </select>
 
     <!-- ============================= -->
