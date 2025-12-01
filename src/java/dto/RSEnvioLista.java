@@ -53,6 +53,4 @@ public class RSEnvioLista {
         this.estatus = estatus;
     }
     
-    
-    
 }
