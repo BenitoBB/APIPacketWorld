@@ -10,7 +10,7 @@ public class EstatusEnvioHistorial {
 
     private Integer idHistorial;
     private String comentario;
-    private String fechaHora;
+    private Timestamp fechaHora;
     // Foreign Keys
     private Integer idEnvio;
     private Integer idEstatus;
@@ -19,7 +19,7 @@ public class EstatusEnvioHistorial {
     public EstatusEnvioHistorial() {
     }
 
-    public EstatusEnvioHistorial(Integer idHistorial, String comentario, String fechaHora, Integer idEnvio, Integer idEstatus, Integer idColaborador) {
+    public EstatusEnvioHistorial(Integer idHistorial, String comentario, Timestamp fechaHora, Integer idEnvio, Integer idEstatus, Integer idColaborador) {
         this.idHistorial = idHistorial;
         this.comentario = comentario;
         this.fechaHora = fechaHora;
@@ -36,7 +36,7 @@ public class EstatusEnvioHistorial {
         this.comentario = comentario;
     }
 
-    public void setFechaHora(String fechaHora) {
+    public void setFechaHora(Timestamp fechaHora) {
         this.fechaHora = fechaHora;
     }
 
@@ -60,7 +60,7 @@ public class EstatusEnvioHistorial {
         return comentario;
     }
 
-    public String getFechaHora() {
+    public Timestamp getFechaHora() {
         return fechaHora;
     }
 
