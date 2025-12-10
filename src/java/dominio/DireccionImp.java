@@ -35,13 +35,13 @@ public class DireccionImp {
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.DIRECCION_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;

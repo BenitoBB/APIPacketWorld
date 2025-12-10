@@ -60,21 +60,21 @@ public class SucursalImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Sucursal actualizada correctamente.");
+                    respuesta.setMensaje(Mensajes.SUCURSAL_ACTUALIZADA);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró la sucursal a actualizar.");
+                    respuesta.setMensaje(Mensajes.SUCURSAL_NO_ACTUALIZADA);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.SUCURSAL_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
@@ -93,21 +93,21 @@ public class SucursalImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Sucursal dada de baja correctamente.");
+                    respuesta.setMensaje(Mensajes.SUCURSAL_BAJA);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró la sucursal a dar de baja.");
+                    respuesta.setMensaje(Mensajes.SUCURSAL_NO_BAJA);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.SUCURSAL_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
@@ -124,22 +124,22 @@ public class SucursalImp {
 
                 if (suc != null) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Sucursal encontrada.");
+                    respuesta.setMensaje(Mensajes.SUCURSAL_ENCONTRADA);
                     respuesta.setSucursal(suc);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No existe una sucursal con ese ID.");
+                    respuesta.setMensaje(Mensajes.SUCURSAL_NO_ENCONTRADA);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.SUCURSAL_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;

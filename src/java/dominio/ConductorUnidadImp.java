@@ -5,6 +5,7 @@ import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.ConductorUnidad;
+import utilidades.Mensajes;
 
 /**
  *
@@ -28,7 +29,7 @@ public class ConductorUnidadImp {
 
                 if (ocupadas > 0) {
                     respuesta.setError(true);
-                    respuesta.setMensaje("El conductor ya tiene una unidad asignada.");
+                    respuesta.setMensaje(Mensajes.ASIGNACION_EXISTE);
                     return respuesta;
                 }
 
@@ -38,21 +39,21 @@ public class ConductorUnidadImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Unidad asignada correctamente.");
+                    respuesta.setMensaje(Mensajes.ASIGNACION_REALIZADA);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo asignar la unidad.");
+                    respuesta.setMensaje(Mensajes.ASIGNACION_NO_REALIZADA);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje(ex.getMessage());
+                respuesta.setMensaje(Mensajes.ASIGNACION_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
@@ -71,21 +72,21 @@ public class ConductorUnidadImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Unidad desasignada correctamente.");
+                    respuesta.setMensaje(Mensajes.DESASIGNACION_REALIZADA);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró asignación activa.");
+                    respuesta.setMensaje(Mensajes.DESASIGNACION_NO_REALIZADA);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje(ex.getMessage());
+                respuesta.setMensaje(Mensajes.ASIGNACION_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;

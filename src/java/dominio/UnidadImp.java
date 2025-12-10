@@ -6,6 +6,7 @@ import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Unidad;
+import utilidades.Mensajes;
 
 /**
  *
@@ -25,21 +26,21 @@ public class UnidadImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Unidad registrada correctamente.");
+                    respuesta.setMensaje(Mensajes.UNIDAD_REGISTRADA);
                     respuesta.setUnidad(unidad);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo registrar la unidad.");
+                    respuesta.setMensaje(Mensajes.UNIDAD_NO_REGISTRADA);
                 }
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje(ex.getMessage());
+                respuesta.setMensaje(Mensajes.UNIDAD_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexion a la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
@@ -57,22 +58,22 @@ public class UnidadImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Unidad actualizada correctamente.");
+                    respuesta.setMensaje(Mensajes.UNIDAD_ACTUALIZADA);
                     respuesta.setUnidad(unidad);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró la unidad.");
+                    respuesta.setMensaje(Mensajes.UNIDAD_NO_ACTUALIZADA);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje(ex.getMessage());
+                respuesta.setMensaje(Mensajes.UNIDAD_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión a la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
@@ -95,21 +96,21 @@ public class UnidadImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Unidad dada de baja correctamente.");
+                    respuesta.setMensaje(Mensajes.UNIDAD_BAJA);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró la unidad.");
+                    respuesta.setMensaje(Mensajes.UNIDAD_NO_BAJA);
                 }
 
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje(ex.getMessage());
+                respuesta.setMensaje(Mensajes.UNIDAD_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Sin conexión.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
