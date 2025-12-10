@@ -5,18 +5,91 @@
         
 <mapper namespace ="envio">
 
- <!-- ENVIOS ASIGNADOS -->
-<select id="obtener-envios-por-conductor" parameterType="int"  resultType="dto.RSEnvioLista">
-    SELECT 
+    <!-- ENVIOS ASIGNADOS -->
+    <select id="obtener-envios-por-conductor" parameterType="int"  resultType="dto.RSEnvioLista">
+        SELECT 
         e.idEnvio,
         e.numeroGuia,
         CONCAT(d.calle, ' ', d.numero, ', ', d.colonia, ', ',
-               d.codigoPostal, ', ', d.ciudad) AS direccionDestino,
+        d.codigoPostal, ', ', d.ciudad) AS direccionDestino,
         es.nombre AS estatus
-    FROM Envio e
+        FROM Envio e
         INNER JOIN Direccion d ON d.idDireccion = e.idDireccionDestino
         INNER JOIN Estatus es ON es.idEstatus = e.idEstatus
-    WHERE e.idColaborador = #{idColaborador};
-</select>
+        WHERE e.idColaborador = #{idColaborador};
+    </select>
+    <!--selects necesarios para poder visualizar el detalle de un envío-->
+    <select id="obtener-paquetes-por-envio" parameterType="int" resultType="pojo.Paquete">
+        SELECT 
+        idPaquete, 
+        descripcion, 
+        peso, 
+        alto, 
+        ancho, 
+        profundidad 
+        FROM paquete
+        WHERE idEnvio = #{idEnvio}
+    </select>
+    <select id="detalle-envio" parameterType="string" resultType="dto.RSEnvioDetalle">
+        SELECT  
+        e.idEnvio AS idEnvio,
+        e.numeroGuia AS numeroGuia,
+        e.fechaEnvio AS fechaEnvio,
+        e.fechaEntrega AS fechaEntrega,
+
+        -- Destinatario directo desde envio
+        e.nombreDestinatario AS nombreDestinatario,
+        e.apellidoPaternoDestinatario AS apellidoPaternoDestinatario,
+        e.apellidoMaternoDestinatario AS apellidoMaternoDestinatario,
+
+        -- Cliente remitente
+        c.nombre AS clienteNombre,
+        c.apellidoPaterno AS clienteApellidoPaterno,
+        c.apellidoMaterno AS clienteApellidoMaterno,
+        c.telefono AS clienteTelefono,
+        c.correo AS clienteCorreo,
+
+        -- Sucursal origen
+        s.nombre AS sucursalOrigen,
+
+        -- Dirección destino
+        dir.calle AS dirCalle,
+        dir.numero AS dirNumero,
+        dir.colonia AS dirColonia,
+        dir.codigoPostal AS dirCP,
+        dir.ciudad AS dirCiudad,
+        dir.estado AS dirEstado,
+
+        -- Estatus del envío
+        est.descripcion AS estatus
+
+        FROM envio e
+        JOIN cliente c ON e.idClienteRemitente = c.idCliente
+        JOIN sucursal s ON e.idSucursalOrigen = s.idSucursal
+        JOIN direccion dir ON e.idDireccionDestino = dir.idDireccion
+        JOIN estatus est ON e.idEstatus = est.idEstatus
+        WHERE e.numeroGuia = #{numeroGuia}
+    </select> 
+    <!--Necesarios para actualizar estatus de envio-->
+    <select id="obtener-idEnvio-por-guia" parameterType="string" resultType="int">
+        SELECT idEnvio FROM Envio WHERE numeroGuia = #{numeroGuia}
+    </select>
+    
+    <update id="actualizar-estatus" parameterType="dto.RSActualizarEstatus">
+    UPDATE Envio
+        SET idEstatus = #{nuevoIdEstatus},
+        fechaEntrega = CASE
+        WHEN #{nuevoIdEstatus} = 5 THEN CURDATE() ELSE fechaEntrega
+        END
+        WHERE numeroGuia = #{numeroGuia}
+    </update>
+
+<insert id="registrar-historial-estatus" parameterType="pojo.EstatusEnvioHistorial">
+    INSERT INTO EstatusEnvioHistorial 
+        (idEnvio, idEstatus, fechaHora, comentario, idColaborador)
+    VALUES 
+        (#{idEnvio}, #{idEstatus}, NOW(), #{comentario}, #{idColaborador})
+</insert>
 </mapper>
+
 
