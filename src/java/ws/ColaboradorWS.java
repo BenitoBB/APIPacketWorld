@@ -21,7 +21,7 @@ import pojo.Colaborador;
 public class ColaboradorWS {
 
     // Login
-    @Path("administracion")
+    @Path("login")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public RSColaborador autenticacionColaborador(

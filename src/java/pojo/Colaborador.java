@@ -5,7 +5,7 @@ package pojo;
  * @authors Ohana & Benito
  */
 public class Colaborador {
-    
+
     private Integer idColaborador;
     private String noPersonal;
     private String nombre;
@@ -21,11 +21,12 @@ public class Colaborador {
     // Foreign Keys
     private Integer idRol;
     private Integer idSucursal;
+    private String nombreRol;
 
     public Colaborador() {
     }
 
-    public Colaborador(Integer idColaborador, String noPersonal, String nombre, String apellidoPaterno, String apellidoMaterno, String curp, String correo, String telefono, byte[] foto, String password, String numeroLicencia, Integer idRol, Integer idSucursal) {
+    public Colaborador(Integer idColaborador, String noPersonal, String nombre, String apellidoPaterno, String apellidoMaterno, String curp, String correo, String telefono, byte[] foto, String password, String numeroLicencia, Integer idRol, Integer idSucursal, String nombreRol) {
         this.idColaborador = idColaborador;
         this.noPersonal = noPersonal;
         this.nombre = nombre;
@@ -39,6 +40,7 @@ public class Colaborador {
         this.numeroLicencia = numeroLicencia;
         this.idRol = idRol;
         this.idSucursal = idSucursal;
+        this.nombreRol = nombreRol;
     }
 
     public void setIdColaborador(Integer idColaborador) {
@@ -93,6 +95,10 @@ public class Colaborador {
         this.idSucursal = idSucursal;
     }
 
+    public void setNombreRol(String nombreRol) {
+        this.nombreRol = nombreRol;
+    }
+
     public Integer getIdColaborador() {
         return idColaborador;
     }
@@ -144,6 +150,9 @@ public class Colaborador {
     public Integer getIdSucursal() {
         return idSucursal;
     }
-    
-    
+
+    public String getNombreRol() {
+        return nombreRol;
+    }
+
 }

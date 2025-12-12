@@ -94,13 +94,14 @@
     <!-- LOGIN                         -->
     <!-- ============================= -->
     <select id="login-colaborador" parameterType="map" resultType="pojo.Colaborador">
-        SELECT 
-        idColaborador, noPersonal, nombre, apellidoPaterno, apellidoMaterno, 
-        curp, correo, telefono, foto, numeroLicencia, 
-        idRol, idSucursal 
-        FROM Colaborador 
-        WHERE noPersonal = #{noPersonal} 
-        AND password = #{password} 
+        SELECT c.idColaborador, c.noPersonal, c.nombre, c.apellidoPaterno, c.apellidoMaterno, 
+        c.curp, c.correo, c.telefono, c.foto, c.numeroLicencia, c.idRol,
+        r.nombre AS nombreRol, 
+        c.idSucursal 
+        FROM Colaborador c 
+        INNER JOIN Rol r ON c.idRol = r.idRol 
+        WHERE c.noPersonal = #{noPersonal} 
+        AND c.password = #{password} 
     </select>
 
 </mapper>
