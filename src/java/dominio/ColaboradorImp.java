@@ -1,5 +1,6 @@
 package dominio;
 
+import dto.ColaboradorTablaDTO;
 import dto.RSColaborador;
 import dto.Respuesta;
 import java.util.HashMap;
@@ -15,6 +16,21 @@ import utilidades.Mensajes;
  * @authors Ohana & Benito
  */
 public class ColaboradorImp {
+
+    // Obtener todos
+    public static List<ColaboradorTablaDTO> obtenerColaboradoresTabla() {
+        List<ColaboradorTablaDTO> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("colaborador.obtener-todos");
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return lista;
+    }
 
     // Login
     public static RSColaborador autenticarAdministracion(String noPersonal, String password) {

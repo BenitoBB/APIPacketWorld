@@ -1,6 +1,7 @@
 package ws;
 
 import dominio.ColaboradorImp;
+import dto.ColaboradorTablaDTO;
 import dto.RSColaborador;
 import dto.Respuesta;
 import java.util.List;
@@ -20,9 +21,18 @@ import pojo.Colaborador;
 @Path("colaborador")
 public class ColaboradorWS {
 
+    // Obtener todos
+    @Path("obtener-todos")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ColaboradorTablaDTO> obtenerColaboradoresTabla() {
+        return ColaboradorImp.obtenerColaboradoresTabla();
+    }
+
     // Login
     @Path("login")
     @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public RSColaborador autenticacionColaborador(
             @FormParam("noPersonal") String noPersonal,
