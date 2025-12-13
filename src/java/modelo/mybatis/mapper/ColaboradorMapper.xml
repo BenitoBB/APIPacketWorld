@@ -42,17 +42,21 @@
     <!-- ============================= -->
     <update id="actualizar-colaborador" parameterType="pojo.Colaborador">
         UPDATE Colaborador 
-        SET 
-        nombre = #{nombre}, 
-        apellidoPaterno = #{apellidoPaterno}, 
-        apellidoMaterno = #{apellidoMaterno}, 
-        curp = #{curp}, 
-        telefono = #{telefono}, 
-        foto = #{foto},  
-        password = #{password},  
-        numeroLicencia = #{numeroLicencia}, 
-        idSucursal = #{idSucursal} 
-        WHERE idColaborador = #{idColaborador}
+        <set>
+            nombre = #{nombre}, 
+            apellidoPaterno = #{apellidoPaterno}, 
+            apellidoMaterno = #{apellidoMaterno}, 
+            curp = #{curp}, 
+            telefono = #{telefono}, 
+            foto = #{foto}, 
+            numeroLicencia = #{numeroLicencia}, 
+            idSucursal = #{idSucursal} 
+
+            <if test="password != null and password != ''">
+                , password = #{password} 
+            </if>
+        </set>
+        WHERE idColaborador = #{idColaborador} 
     </update>
 
     <!-- ============================= -->
