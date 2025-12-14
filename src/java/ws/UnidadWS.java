@@ -22,6 +22,14 @@ import pojo.Unidad;
 @Path("unidad")
 public class UnidadWS {
 
+    // Obtener todas las unidades
+    @Path("obtener-todas")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Unidad> obtenerTodas() {
+        return UnidadImp.obtenerTodas(); 
+    }
+
     // Insertar Unidad
     @Path("insertar")
     @POST

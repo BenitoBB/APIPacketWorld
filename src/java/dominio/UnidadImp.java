@@ -14,6 +14,24 @@ import utilidades.Mensajes;
  */
 public class UnidadImp {
 
+    // Obtener todas las unidades
+    public static List<Unidad> obtenerTodas() {
+        List<Unidad> lista = null; 
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("unidad.obtener-todas");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return lista; 
+    }
+
     // Insertar Unidad
     public static RSUnidad insertarUnidad(Unidad unidad) {
         RSUnidad respuesta = new RSUnidad();

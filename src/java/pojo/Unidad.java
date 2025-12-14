@@ -102,6 +102,4 @@ public class Unidad {
     public String getMotivoBaja() {
         return motivoBaja;
     }
-    
-    
 }
