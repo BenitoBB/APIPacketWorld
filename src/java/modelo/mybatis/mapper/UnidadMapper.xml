@@ -12,6 +12,7 @@
     <select id="obtener-todas" resultType="pojo.Unidad">
         SELECT *   
         FROM Unidad 
+        WHERE estatus = 'Activa' 
     </select>
     
     
@@ -42,12 +43,12 @@
     <!-- ====================================================== -->
     <!-- DAR DE BAJA UNIDAD                                     -->
     <!-- ====================================================== -->
-    <update id="dar-baja-unidad" parameterType="map">
-        UPDATE Unidad 
-        SET  
-        estatus = 'Inactiva', 
-        motivoBaja = #{motivoBaja} 
-        WHERE idUnidad = #{idUnidad} 
+    <update id="dar-baja-unidad" parameterType="pojo.Unidad"> 
+        UPDATE Unidad   
+        SET    
+        estatus = 'Inactiva',   
+        motivoBaja = #{motivoBaja}   
+        WHERE idUnidad = #{idUnidad}  
     </update>
 
     <!-- ====================================================== -->
