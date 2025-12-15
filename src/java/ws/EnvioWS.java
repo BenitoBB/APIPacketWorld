@@ -22,7 +22,7 @@ public class EnvioWS {
 
     @GET
     @Path("porConductor/{idColaborador}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public List<RSEnvioLista> obtenerEnviosPorConductor(
             @PathParam("idColaborador") Integer idColaborador) {
 
@@ -35,7 +35,7 @@ public class EnvioWS {
 
     @GET
     @Path("detalle/{numeroGuia}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public RSEnvioDetalle obtenerDetalleEnvio(
             @PathParam("numeroGuia") String numeroGuia) {
 
@@ -78,4 +78,4 @@ public class EnvioWS {
             throw new BadRequestException("Error en el formato de la solicitud JSON: " + e.getMessage());
         }
     }
-    }
+}

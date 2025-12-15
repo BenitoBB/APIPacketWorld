@@ -1,10 +1,7 @@
 
 package dto;
 
-/**
- *
- * @author ohana
- */
+
 public class RSEnvioLista {
     private int idEnvio;
     private String numeroGuia;

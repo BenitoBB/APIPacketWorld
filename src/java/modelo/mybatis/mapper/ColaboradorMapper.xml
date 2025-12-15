@@ -84,9 +84,12 @@
         nombre = #{nombre}, 
         apellidoPaterno = #{apellidoPaterno}, 
         apellidoMaterno = #{apellidoMaterno}, 
+        curp = #{curp},
+        correo = #{correo},
         telefono = #{telefono}, 
         foto = #{foto}, 
-        password = #{password} 
+        password = #{password},
+        numeroLicencia = #{numeroLicencia}
         WHERE idColaborador = #{idColaborador} 
     </update>
 
@@ -103,5 +106,6 @@
         WHERE c.noPersonal = #{noPersonal} 
         AND c.password = #{password} 
     </select>
+    
 
 </mapper>
