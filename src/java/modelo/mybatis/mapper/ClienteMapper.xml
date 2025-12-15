@@ -5,6 +5,44 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cliente">
+    
+    <!-- ====================================================== -->
+    <!-- RESULT MAP CLIENTE + DIRECCION                         -->
+    <!-- ====================================================== -->
+    <resultMap id="clienteDireccionRM" type="pojo.Cliente">
+
+        <id property="idCliente" column="idCliente"/>
+        <result property="nombre" column="nombre"/>
+        <result property="apellidoPaterno" column="apellidoPaterno"/>
+        <result property="apellidoMaterno" column="apellidoMaterno"/>
+        <result property="telefono" column="telefono"/>
+        <result property="correo" column="correo"/>
+        <result property="idDireccion" column="idDireccion"/>
+
+        <association property="direccion" javaType="pojo.Direccion">
+            <id property="idDireccion" column="idDireccion"/>
+            <result property="calle" column="calle"/>
+            <result property="numero" column="numero"/>
+            <result property="colonia" column="colonia"/>
+            <result property="codigoPostal" column="codigoPostal"/>
+            <result property="ciudad" column="ciudad"/>
+            <result property="estado" column="estado"/>
+        </association>
+
+    </resultMap>
+    
+    <!-- ====================================================== -->
+    <!-- OBTENER TODOS LOS CLIENTES                            -->
+    <!-- ====================================================== -->
+    <select id="obtener-todos" resultMap="clienteDireccionRM">
+        SELECT 
+        c.idCliente, c.nombre, c.apellidoPaterno, c.apellidoMaterno,  
+        c.telefono, c.correo, c.idDireccion, 
+        d.calle, d.numero, d.colonia, d.codigoPostal, d.ciudad, d.estado 
+        FROM Cliente c 
+        INNER JOIN Direccion d 
+        ON c.idDireccion = d.idDireccion 
+    </select> 
 
     <!-- ====================================================== -->
     <!-- INSERTAR CLIENTE                                       -->

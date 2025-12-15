@@ -12,16 +12,19 @@ public class Sucursal {
     private String estatus;
     // Foreign Key
     private Integer idDireccion;
+    // OBJETO COMPLETO
+    private Direccion direccion;
 
     public Sucursal() {
     }
 
-    public Sucursal(Integer idSucursal, String codigo, String nombre, String estatus, Integer idDireccion) {
+    public Sucursal(Integer idSucursal, String codigo, String nombre, String estatus, Integer idDireccion, Direccion direccion) {
         this.idSucursal = idSucursal;
         this.codigo = codigo;
         this.nombre = nombre;
         this.estatus = estatus;
         this.idDireccion = idDireccion;
+        this.direccion = direccion;
     }
 
     public void setIdSucursal(Integer idSucursal) {
@@ -44,6 +47,10 @@ public class Sucursal {
         this.idDireccion = idDireccion;
     }
 
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+
     public Integer getIdSucursal() {
         return idSucursal;
     }
@@ -64,4 +71,7 @@ public class Sucursal {
         return idDireccion;
     }
 
+    public Direccion getDireccion() {
+        return direccion;
+    }
 }

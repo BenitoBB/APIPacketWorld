@@ -14,6 +14,24 @@ import utilidades.Mensajes;
  */
 public class ClienteImp {
 
+    // Obtener todos
+    public static List<Cliente> obtenerTodos() {
+        List<Cliente> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("cliente.obtener-todos");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return lista;
+    }
+
     // Insertar
     public static RSCliente insertar(Cliente cliente) {
         RSCliente respuesta = new RSCliente();

@@ -5,6 +5,7 @@ import dto.Respuesta;
 import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
+import pojo.Direccion;
 import pojo.Sucursal;
 import utilidades.Mensajes;
 
@@ -14,6 +15,24 @@ import utilidades.Mensajes;
  */
 public class SucursalImp {
 
+    // Obtener todas
+    public static List<Sucursal> obtenerTodas() {
+        List<Sucursal> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("sucursal.obtener-todas");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return lista;
+    }
+
     // Insertar
     public static RSSucursal insertar(Sucursal sucursal) {
         RSSucursal respuesta = new RSSucursal();
@@ -21,6 +40,11 @@ public class SucursalImp {
 
         if (conexionBD != null) {
             try {
+                Direccion direccion = sucursal.getDireccion();
+                conexionBD.insert("direccion.insertar", direccion);
+
+                sucursal.setIdDireccion(direccion.getIdDireccion());
+
                 int filas = conexionBD.insert("sucursal.insertar-sucursal", sucursal);
                 conexionBD.commit();
 
@@ -34,12 +58,12 @@ public class SucursalImp {
                 }
 
             } catch (Exception ex) {
+                conexionBD.rollback();
                 respuesta.setError(true);
                 respuesta.setMensaje(Mensajes.SUCURSAL_ERROR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
-
         } else {
             respuesta.setError(true);
             respuesta.setMensaje(Mensajes.SIN_CONEXION);
@@ -51,30 +75,35 @@ public class SucursalImp {
     // Actualizar (excepto codigo y estatus)
     public static Respuesta actualizar(Sucursal sucursal) {
         Respuesta respuesta = new Respuesta();
-        SqlSession conexionBD = MyBatisUtil.getSession();
 
-        if (conexionBD != null) {
-            try {
-                int filas = conexionBD.update("sucursal.actualizar-sucursal", sucursal);
-                conexionBD.commit();
+        try (SqlSession sesion = MyBatisUtil.getSession()) {
 
-                if (filas > 0) {
-                    respuesta.setError(false);
-                    respuesta.setMensaje(Mensajes.SUCURSAL_ACTUALIZADA);
-                } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje(Mensajes.SUCURSAL_NO_ACTUALIZADA);
-                }
+            // Obtener sucursal actual desde BD
+            Sucursal sucursalBD = sesion.selectOne(
+                    "sucursal.obtener-sucursal-por-id",
+                    sucursal.getIdSucursal()
+            );
 
-            } catch (Exception ex) {
-                respuesta.setError(true);
-                respuesta.setMensaje(Mensajes.SUCURSAL_ERROR + ex.getMessage());
-            } finally {
-                conexionBD.close();
+            Direccion dirBD = sucursalBD.getDireccion();
+            Direccion dirNueva = sucursal.getDireccion();
+
+            boolean actualizarDireccion = !dirBD.equals(dirNueva);
+
+            if (actualizarDireccion) {
+                // Asegurar ID
+                dirNueva.setIdDireccion(dirBD.getIdDireccion());
+                sesion.update("direccion.actualizar", dirNueva);
             }
-        } else {
+
+            sesion.update("sucursal.actualizar", sucursal);
+            sesion.commit();
+
+            respuesta.setError(false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
             respuesta.setError(true);
-            respuesta.setMensaje(Mensajes.SIN_CONEXION);
+            respuesta.setMensaje("Error en la operación de sucursal");
         }
 
         return respuesta;

@@ -22,6 +22,14 @@ import pojo.Sucursal;
 @Path("sucursal")
 public class SucursalWS {
 
+    // Obtener todas
+    @GET
+    @Path("obtener-todas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Sucursal> obtenerTodas() {
+        return SucursalImp.obtenerTodas();
+    }
+
     // Insertar
     @POST
     @Path("insertar")

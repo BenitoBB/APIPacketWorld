@@ -5,6 +5,45 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="sucursal">
+    
+    <!-- ====================================================== -->
+    <!-- MAPPER CON JOIN                                        -->
+    <!-- ====================================================== -->
+    
+    <resultMap id="sucursalDireccionRM" type="pojo.Sucursal">
+
+        <id property="idSucursal" column="idSucursal"/>
+        <result property="codigo" column="codigo"/>
+        <result property="nombre" column="nombre"/>
+        <result property="estatus" column="estatus"/>
+        <result property="idDireccion" column="idDireccion"/>
+
+        <association property="direccion" javaType="pojo.Direccion">
+            <id property="idDireccion" column="idDireccion"/>
+            <result property="calle" column="calle"/>
+            <result property="numero" column="numero"/>
+            <result property="colonia" column="colonia"/>
+            <result property="codigoPostal" column="codigoPostal"/>
+            <result property="ciudad" column="ciudad"/>
+            <result property="estado" column="estado"/>
+        </association>
+
+    </resultMap>
+
+    
+    <!-- ====================================================== -->
+    <!-- OBTENER TODAS LAS SUCURSALES                           -->
+    <!-- ====================================================== -->
+    <select id="obtener-todas" resultMap="sucursalDireccionRM">
+        SELECT 
+        s.idSucursal, s.codigo, s.nombre, s.estatus, s.idDireccion, 
+        d.calle, d.numero, d.colonia, d.codigoPostal, d.ciudad, d.estado 
+        FROM Sucursal s 
+        INNER JOIN Direccion d 
+        ON s.idDireccion = d.idDireccion 
+        WHERE s.estatus = 'Activa' 
+    </select>
+
 
     <!-- ====================================================== -->
     <!-- INSERTAR SUCURSAL                                      -->
@@ -25,14 +64,13 @@
     <!-- ====================================================== -->
     <!-- ACTUALIZAR SUCURSAL (NO cambia código NI estatus)      -->
     <!-- ====================================================== -->
-    <update id="actualizar-sucursal"
-            parameterType="pojo.Sucursal">
-
-        UPDATE Sucursal SET 
-        nombre = #{nombre}, 
-        idDireccion = #{idDireccion} 
-        WHERE idSucursal = #{idSucursal} 
+    <update id="actualizar" parameterType="pojo.Sucursal">
+        UPDATE Sucursal 
+        SET nombre = #{nombre}, 
+        idDireccion = #{direccion.idDireccion} 
+        WHERE idSucursal = #{idSucursal}
     </update>
+
 
 
     <!-- ====================================================== -->
@@ -52,12 +90,15 @@
     <!-- ====================================================== -->
     <select id="obtener-sucursal-por-id"
             parameterType="int"
-            resultType="pojo.Sucursal">
-
-        SELECT * 
-        FROM Sucursal 
-        WHERE idSucursal = #{idSucursal}
+            resultMap="sucursalDireccionRM">
+        SELECT  
+        s.idSucursal, s.codigo, s.nombre, s.estatus, s.idDireccion, 
+        d.calle, d.numero, d.colonia, d.codigoPostal, d.ciudad, d.estado 
+        FROM Sucursal s 
+        INNER JOIN Direccion d ON s.idDireccion = d.idDireccion 
+        WHERE s.idSucursal = #{idSucursal} 
     </select>
+
 
 
     <!-- ====================================================== -->
