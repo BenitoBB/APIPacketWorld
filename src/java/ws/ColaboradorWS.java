@@ -1,6 +1,8 @@
 package ws;
 
 import dominio.ColaboradorImp;
+import dto.ColaboradorTablaDTO;
+import dto.RSCambioPassword;
 import dto.RSColaborador;
 import dto.Respuesta;
 import java.util.List;
@@ -20,9 +22,18 @@ import pojo.Colaborador;
 @Path("colaborador")
 public class ColaboradorWS {
 
+    // Obtener todos
+    @Path("obtener-todos")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ColaboradorTablaDTO> obtenerColaboradoresTabla() {
+        return ColaboradorImp.obtenerColaboradoresTabla();
+    }
+
     // Login
     @Path("login")
     @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public RSColaborador autenticacionColaborador(
             @FormParam("noPersonal") String noPersonal,
@@ -103,7 +114,7 @@ public class ColaboradorWS {
     @Path("perfil/actualizar")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public RSColaborador actualizarPerfil(Colaborador colaborador) {
 
         if (colaborador != null && colaborador.getIdColaborador() != null) {
@@ -111,5 +122,48 @@ public class ColaboradorWS {
         }
 
         throw new BadRequestException("Datos insuficientes para actualizar perfil.");
+    }
+
+    @Path("perfil/obtener/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public RSColaborador obtenerDatosPerfil(@PathParam("id") Integer idColaborador) {
+
+        if (idColaborador != null && idColaborador > 0) {
+            // Llama al método que creamos en ColaboradorImp
+            return ColaboradorImp.buscarPerfil(idColaborador);
+        }
+
+        throw new BadRequestException("ID de colaborador no válido.");
+    }
+
+    @Path("password/cambiar")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public Respuesta cambiarPassword(RSCambioPassword datosCambio) {
+
+        // 1. Validaciones de null/vacío para los campos críticos
+        if (datosCambio == null
+                || datosCambio.getIdColaborador() == null
+                || datosCambio.getIdColaborador() <= 0
+                || datosCambio.getPasswordActual() == null || datosCambio.getPasswordActual().isEmpty()
+                || datosCambio.getPasswordNueva() == null || datosCambio.getPasswordNueva().isEmpty()) {
+            throw new BadRequestException("Datos insuficientes para cambiar la contraseña (ID, actual y nueva son obligatorios).");
+        }
+
+        // 2. Llamada a la lógica de dominio
+        return ColaboradorImp.cambiarPassword(datosCambio);
+    }
+
+   
+    @Path("obtenerPassword/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta ObtenerPassword(@PathParam("id") Integer idColaborador) {
+        if (idColaborador == null || idColaborador <= 0) {
+            throw new BadRequestException("ID no válido.");
+        }
+        return ColaboradorImp.ObtenerPassword(idColaborador);
     }
 }

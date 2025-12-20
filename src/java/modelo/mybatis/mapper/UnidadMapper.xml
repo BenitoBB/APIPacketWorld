@@ -7,7 +7,17 @@
 <mapper namespace="unidad">
 
     <!-- ====================================================== -->
-    <!-- INSERTAR UNIDAD                                         -->
+    <!-- OBTENER TODAS LAS UNIDADES                              -->
+    <!-- ====================================================== -->
+    <select id="obtener-todas" resultType="pojo.Unidad">
+        SELECT *   
+        FROM Unidad 
+        WHERE estatus = 'Activa' 
+    </select>
+    
+    
+    <!-- ====================================================== -->
+    <!-- INSERTAR UNIDAD                                        -->
     <!-- ====================================================== -->
     <insert id="insertar-unidad" parameterType="pojo.Unidad">
         INSERT INTO Unidad( 
@@ -20,7 +30,7 @@
     </insert>
 
     <!-- ====================================================== -->
-    <!-- ACTUALIZAR UNIDAD (SIN VIN)                             -->
+    <!-- ACTUALIZAR UNIDAD (SIN VIN)                            -->
     <!-- ====================================================== -->
     <update id="actualizar-unidad" parameterType="pojo.Unidad">
         UPDATE Unidad 
@@ -31,18 +41,18 @@
     </update>
 
     <!-- ====================================================== -->
-    <!-- DAR DE BAJA UNIDAD                                      -->
+    <!-- DAR DE BAJA UNIDAD                                     -->
     <!-- ====================================================== -->
-    <update id="dar-baja-unidad" parameterType="map">
-        UPDATE Unidad 
-        SET  
-        estatus = 'Inactiva', 
-        motivoBaja = #{motivoBaja} 
-        WHERE idUnidad = #{idUnidad} 
+    <update id="dar-baja-unidad" parameterType="pojo.Unidad"> 
+        UPDATE Unidad   
+        SET    
+        estatus = 'Inactiva',   
+        motivoBaja = #{motivoBaja}   
+        WHERE idUnidad = #{idUnidad}  
     </update>
 
     <!-- ====================================================== -->
-    <!-- BUSCAR POR VIN                                          -->
+    <!-- BUSCAR POR VIN                                         -->
     <!-- ====================================================== -->
     <select id="buscar-por-vin" parameterType="string" resultType="pojo.Unidad">
         SELECT * 
@@ -51,7 +61,7 @@
     </select>
 
     <!-- ====================================================== -->
-    <!-- BUSCAR POR MARCA                                        -->
+    <!-- BUSCAR POR MARCA                                       -->
     <!-- ====================================================== -->
     <select id="buscar-por-marca" parameterType="string" resultType="pojo.Unidad">
         SELECT * 
@@ -60,7 +70,7 @@
     </select>
 
     <!-- ====================================================== -->
-    <!-- BUSCAR POR NII (Número Identificación Interno)          -->
+    <!-- BUSCAR POR NII (Número Identificación Interno)         -->
     <!-- ====================================================== -->
     <select id="buscar-por-nii" parameterType="string" resultType="pojo.Unidad">
         SELECT * 

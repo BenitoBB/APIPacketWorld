@@ -1,5 +1,7 @@
 package dominio;
 
+import dto.ColaboradorTablaDTO;
+import dto.RSCambioPassword;
 import dto.RSColaborador;
 import dto.Respuesta;
 import java.util.HashMap;
@@ -15,6 +17,21 @@ import utilidades.Mensajes;
  * @authors Ohana & Benito
  */
 public class ColaboradorImp {
+
+    // Obtener todos
+    public static List<ColaboradorTablaDTO> obtenerColaboradoresTabla() {
+        List<ColaboradorTablaDTO> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("colaborador.obtener-todos");
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return lista;
+    }
 
     // Login
     public static RSColaborador autenticarAdministracion(String noPersonal, String password) {
@@ -229,4 +246,128 @@ public class ColaboradorImp {
 
         return respuesta;
     }
+    
+    public static RSColaborador buscarPerfil(int idColaborador) {
+        RSColaborador respuesta = new RSColaborador();
+        SqlSession conexionBD = MyBatisUtil.getSession(); 
+        Colaborador colaboradorEncontrado = null;
+
+        if (conexionBD != null) {
+            try {
+                colaboradorEncontrado = conexionBD.selectOne("colaborador.buscar-datos-perfil", idColaborador);
+
+                if (colaboradorEncontrado != null) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Datos de perfil obtenidos correctamente.");
+                    respuesta.setColaborador(colaboradorEncontrado);
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("Error: Colaborador no encontrado.");
+                }
+
+            } catch (Exception e) {
+                respuesta.setError(true);
+                respuesta.setMensaje("Error interno del servidor al buscar el perfil: " + e.getMessage());
+                e.printStackTrace();
+            } finally {
+                conexionBD.close(); 
+            }
+        } else {
+             respuesta.setError(true);
+             respuesta.setMensaje("Error: No se pudo establecer la conexión con la base de datos.");
+        }
+        return respuesta;
+    }
+    
+    public static Respuesta cambiarPassword(RSCambioPassword datosCambio) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                // 1. Obtener la contraseña ACTUAL de la DB 
+                // Usamos pojo.Colaborador como resultType para obtener solo el campo password
+                Colaborador colaboradorDB = conexionBD.selectOne(
+                    "colaborador.obtener-password-actual", 
+                    datosCambio.getIdColaborador()
+                );
+                
+                if (colaboradorDB == null || colaboradorDB.getPassword() == null) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("Error: Usuario no encontrado o sin contraseña registrada.");
+                    return respuesta;
+                }
+                
+                String passwordActualDB = colaboradorDB.getPassword();
+                
+                // 2. VALIDACIÓN DE LA CONTRASEÑA ACTUAL (Texto plano)
+                if (!passwordActualDB.equals(datosCambio.getPasswordActual())) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("Contraseña actual incorrecta. Verifique sus datos.");
+                    return respuesta;
+                }
+                
+                // 3. Llamar al mapper para actualizar 
+                // Pasamos el DTO directamente. El mapper usa datosCambio.getIdColaborador() y datosCambio.getPasswordNueva()
+                int filasAfectadas = conexionBD.update("colaborador.cambiar-password", datosCambio);
+                conexionBD.commit();
+
+                if (filasAfectadas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Contraseña actualizada con éxito.");
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("No se pudo completar la operación de cambio.");
+                }
+
+            } catch (Exception ex) {
+                conexionBD.rollback();
+                respuesta.setError(true);
+                respuesta.setMensaje(Mensajes.COLABORADOR_ERROR + ex.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
+        }
+        return respuesta;
+    }
+    
+   
+// ⭐⭐ TEMPORAL: Método para probar el mapper de obtención de contraseña ⭐⭐
+public static Respuesta ObtenerPassword(int idColaborador) {
+    Respuesta respuesta = new Respuesta();
+    SqlSession conexionBD = MyBatisUtil.getSession();
+    
+    if (conexionBD != null) {
+        try {
+            Colaborador colaboradorDB = conexionBD.selectOne(
+                "colaborador.obtener-password-actual", 
+                idColaborador
+            );
+            
+            if (colaboradorDB != null && colaboradorDB.getPassword() != null) {
+                // NO HAGAS ESTO EN PRODUCCIÓN: Exponer la contraseña es un riesgo.
+                respuesta.setError(false);
+                respuesta.setMensaje("Contraseña obtenida: " + colaboradorDB.getPassword()); 
+            } else {
+                respuesta.setError(true);
+                respuesta.setMensaje("Colaborador no encontrado o sin contraseña.");
+            }
+
+        } catch (Exception ex) {
+            respuesta.setError(true);
+            respuesta.setMensaje("Error de DB: " + ex.getMessage());
+        } finally {
+            conexionBD.close();
+        }
+    } else {
+        respuesta.setError(true);
+        respuesta.setMensaje("Sin conexión a DB.");
+    }
+    return respuesta;
 }
+    
+}
+   
