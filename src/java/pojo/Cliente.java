@@ -14,11 +14,13 @@ public class Cliente {
     private String correo;
     // Foreign Key
     private Integer idDireccion;
+    // OBJETO COMPLETO
+    private Direccion direccion;
 
     public Cliente() {
     }
 
-    public Cliente(Integer idCliente, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String correo, Integer idDireccion) {
+    public Cliente(Integer idCliente, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String correo, Integer idDireccion, Direccion direccion) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -26,6 +28,7 @@ public class Cliente {
         this.telefono = telefono;
         this.correo = correo;
         this.idDireccion = idDireccion;
+        this.direccion = direccion;
     }
 
     public void setIdCliente(Integer idCliente) {
@@ -56,6 +59,10 @@ public class Cliente {
         this.idDireccion = idDireccion;
     }
 
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+
     public Integer getIdCliente() {
         return idCliente;
     }
@@ -84,4 +91,7 @@ public class Cliente {
         return idDireccion;
     }
 
+    public Direccion getDireccion() {
+        return direccion;
+    }
 }

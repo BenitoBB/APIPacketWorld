@@ -76,20 +76,20 @@
     </select>
     
     <update id="actualizar-estatus" parameterType="dto.RSActualizarEstatus">
-    UPDATE Envio
+        UPDATE Envio
         SET idEstatus = #{nuevoIdEstatus},
-        fechaEntrega = CASE
-        WHEN #{nuevoIdEstatus} = 5 THEN CURDATE() ELSE fechaEntrega
-        END
-        WHERE numeroGuia = #{numeroGuia}
+        fechaEntrega = CASE 
+        WHEN #{nuevoIdEstatus} = 5 THEN CURDATE() ELSE fechaEntrega 
+        END 
+        WHERE numeroGuia = #{numeroGuia} 
     </update>
 
-<insert id="registrar-historial-estatus" parameterType="pojo.EstatusEnvioHistorial">
-    INSERT INTO EstatusEnvioHistorial 
+    <insert id="registrar-historial-estatus" parameterType="pojo.EstatusEnvioHistorial">
+        INSERT INTO EstatusEnvioHistorial 
         (idEnvio, idEstatus, fechaHora, comentario, idColaborador)
-    VALUES 
+        VALUES 
         (#{idEnvio}, #{idEstatus}, NOW(), #{comentario}, #{idColaborador})
-</insert>
+    </insert>
 </mapper>
 
 

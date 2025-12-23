@@ -23,6 +23,14 @@ import pojo.Cliente;
 @Path("cliente")
 public class ClienteWS {
 
+    // Obtener todos
+    @GET
+    @Path("obtener-todos")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Cliente> obtenerTodos() {
+        return ClienteImp.obtenerTodos();
+    }
+
     // Insertar
     @POST
     @Path("insertar")

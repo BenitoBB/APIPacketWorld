@@ -83,4 +83,21 @@ public class Direccion {
         return estado;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Direccion d = (Direccion) o;
+
+        return calle.equals(d.calle)
+                && numero.equals(d.numero)
+                && codigoPostal.equals(d.codigoPostal)
+                && ciudad.equals(d.ciudad)
+                && estado.equals(d.estado)
+                && colonia.equals(d.colonia);
+    }
 }
