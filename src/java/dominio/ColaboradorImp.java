@@ -246,10 +246,10 @@ public class ColaboradorImp {
 
         return respuesta;
     }
-    
+
     public static RSColaborador buscarPerfil(int idColaborador) {
         RSColaborador respuesta = new RSColaborador();
-        SqlSession conexionBD = MyBatisUtil.getSession(); 
+        SqlSession conexionBD = MyBatisUtil.getSession();
         Colaborador colaboradorEncontrado = null;
 
         if (conexionBD != null) {
@@ -270,15 +270,15 @@ public class ColaboradorImp {
                 respuesta.setMensaje("Error interno del servidor al buscar el perfil: " + e.getMessage());
                 e.printStackTrace();
             } finally {
-                conexionBD.close(); 
+                conexionBD.close();
             }
         } else {
-             respuesta.setError(true);
-             respuesta.setMensaje("Error: No se pudo establecer la conexión con la base de datos.");
+            respuesta.setError(true);
+            respuesta.setMensaje("Error: No se pudo establecer la conexión con la base de datos.");
         }
         return respuesta;
     }
-    
+
     public static Respuesta cambiarPassword(RSCambioPassword datosCambio) {
         Respuesta respuesta = new Respuesta();
         SqlSession conexionBD = MyBatisUtil.getSession();
@@ -288,25 +288,25 @@ public class ColaboradorImp {
                 // 1. Obtener la contraseña ACTUAL de la DB 
                 // Usamos pojo.Colaborador como resultType para obtener solo el campo password
                 Colaborador colaboradorDB = conexionBD.selectOne(
-                    "colaborador.obtener-password-actual", 
-                    datosCambio.getIdColaborador()
+                        "colaborador.obtener-password-actual",
+                        datosCambio.getIdColaborador()
                 );
-                
+
                 if (colaboradorDB == null || colaboradorDB.getPassword() == null) {
                     respuesta.setError(true);
                     respuesta.setMensaje("Error: Usuario no encontrado o sin contraseña registrada.");
                     return respuesta;
                 }
-                
+
                 String passwordActualDB = colaboradorDB.getPassword();
-                
+
                 // 2. VALIDACIÓN DE LA CONTRASEÑA ACTUAL (Texto plano)
                 if (!passwordActualDB.equals(datosCambio.getPasswordActual())) {
                     respuesta.setError(true);
                     respuesta.setMensaje("Contraseña actual incorrecta. Verifique sus datos.");
                     return respuesta;
                 }
-                
+
                 // 3. Llamar al mapper para actualizar 
                 // Pasamos el DTO directamente. El mapper usa datosCambio.getIdColaborador() y datosCambio.getPasswordNueva()
                 int filasAfectadas = conexionBD.update("colaborador.cambiar-password", datosCambio);
@@ -333,41 +333,86 @@ public class ColaboradorImp {
         }
         return respuesta;
     }
-    
-   
-// ⭐⭐ TEMPORAL: Método para probar el mapper de obtención de contraseña ⭐⭐
-public static Respuesta ObtenerPassword(int idColaborador) {
-    Respuesta respuesta = new Respuesta();
-    SqlSession conexionBD = MyBatisUtil.getSession();
-    
-    if (conexionBD != null) {
-        try {
-            Colaborador colaboradorDB = conexionBD.selectOne(
-                "colaborador.obtener-password-actual", 
-                idColaborador
-            );
-            
-            if (colaboradorDB != null && colaboradorDB.getPassword() != null) {
-                // NO HAGAS ESTO EN PRODUCCIÓN: Exponer la contraseña es un riesgo.
-                respuesta.setError(false);
-                respuesta.setMensaje("Contraseña obtenida: " + colaboradorDB.getPassword()); 
-            } else {
-                respuesta.setError(true);
-                respuesta.setMensaje("Colaborador no encontrado o sin contraseña.");
-            }
 
-        } catch (Exception ex) {
+// ⭐⭐ TEMPORAL: Método para probar el mapper de obtención de contraseña ⭐⭐
+    public static Respuesta ObtenerPassword(int idColaborador) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                Colaborador colaboradorDB = conexionBD.selectOne(
+                        "colaborador.obtener-password-actual",
+                        idColaborador
+                );
+
+                if (colaboradorDB != null && colaboradorDB.getPassword() != null) {
+                    // NO HAGAS ESTO EN PRODUCCIÓN: Exponer la contraseña es un riesgo.
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Contraseña obtenida: " + colaboradorDB.getPassword());
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("Colaborador no encontrado o sin contraseña.");
+                }
+
+            } catch (Exception ex) {
+                respuesta.setError(true);
+                respuesta.setMensaje("Error de DB: " + ex.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Error de DB: " + ex.getMessage());
-        } finally {
-            conexionBD.close();
+            respuesta.setMensaje("Sin conexión a DB.");
         }
-    } else {
-        respuesta.setError(true);
-        respuesta.setMensaje("Sin conexión a DB.");
+        return respuesta;
     }
-    return respuesta;
+
+    public static Respuesta guardarFoto(int idColaborador, byte[] foto) {
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                Colaborador colaborador = new Colaborador();
+                colaborador.setIdColaborador(idColaborador);
+                colaborador.setFoto(foto);
+
+                int filasAfectadas = conexionBD.update("colaborador.guardar-foto", colaborador);
+                conexionBD.commit();
+
+                if (filasAfectadas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("La foto del colaborador se guardó correctamente");
+                } else {
+                    respuesta.setMensaje("No se pudo guardar la foto, intente nuevamente");
+                }
+
+            } catch (Exception e) {
+                respuesta.setMensaje(e.getMessage());
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return respuesta;
+    }
+
+    public static Colaborador obtenerFoto(int idColaborador) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        Colaborador colaborador = null;
+
+        if (conexionBD != null) {
+            try {
+                colaborador = conexionBD.selectOne("colaborador.obtener-foto", idColaborador);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return colaborador;
+    }
+
 }
-    
-}
-   

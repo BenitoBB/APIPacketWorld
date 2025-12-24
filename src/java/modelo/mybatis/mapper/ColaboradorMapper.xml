@@ -106,7 +106,6 @@
         curp = #{curp},
         correo = #{correo},
         telefono = #{telefono}, 
-        foto = #{foto}, 
         numeroLicencia = #{numeroLicencia}
         WHERE idColaborador = #{idColaborador} 
     </update>
@@ -127,17 +126,17 @@
     
     <select id="buscar-datos-perfil" parameterType="int" resultType="pojo.Colaborador">
         SELECT 
-            nombre, 
-            apellidoPaterno, 
-            apellidoMaterno, 
-            curp, 
-            correo, 
-            telefono, 
-            numeroLicencia
+        nombre, 
+        apellidoPaterno, 
+        apellidoMaterno, 
+        curp, 
+        correo, 
+        telefono, 
+        numeroLicencia
         FROM 
-            Colaborador
+        Colaborador
         WHERE 
-            idColaborador = #{idColaborador}
+        idColaborador = #{idColaborador}
     </select>
     
     <select id="obtener-password-actual" parameterType="int" resultType="pojo.Colaborador">
@@ -151,4 +150,21 @@
         SET password = #{passwordNueva}
         WHERE idColaborador = #{idColaborador}
     </update>
+    <!-- ============================= -->
+    <!-- GUARDAR FOTO COLABORADOR      -->
+    <!-- ============================= -->
+    <update id="guardar-foto" parameterType="pojo.Colaborador">
+        UPDATE Colaborador 
+        SET foto = #{foto} 
+        WHERE idColaborador = #{idColaborador}
+    </update>
+
+    <!-- ============================= -->
+    <!-- OBTENER FOTO COLABORADOR      -->
+    <!-- ============================= -->
+    <select id="obtener-foto" parameterType="int" resultType="pojo.Colaborador">
+        SELECT idColaborador, TO_BASE64(foto) AS foto
+        FROM Colaborador
+        WHERE idColaborador = #{idColaborador}
+    </select>
 </mapper>

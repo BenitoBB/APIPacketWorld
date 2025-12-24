@@ -156,7 +156,6 @@ public class ColaboradorWS {
         return ColaboradorImp.cambiarPassword(datosCambio);
     }
 
-   
     @Path("obtenerPassword/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -165,5 +164,28 @@ public class ColaboradorWS {
             throw new BadRequestException("ID no válido.");
         }
         return ColaboradorImp.ObtenerPassword(idColaborador);
+    }
+
+    @PUT
+    @Path("subir-foto/{idColaborador}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta subirFoto(@PathParam("idColaborador") Integer idColaborador, byte[] foto) {
+        if (idColaborador != null && idColaborador > 0 && foto != null && foto.length > 0) {
+            return ColaboradorImp.guardarFoto(idColaborador, foto);
+        }
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+        respuesta.setMensaje("Datos inválidos");
+        return respuesta;
+    }
+
+    @GET
+    @Path("obtener-foto/{idColaborador}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Colaborador obtenerFoto(@PathParam("idColaborador") Integer idColaborador) {
+        if (idColaborador != null && idColaborador > 0) {
+            return ColaboradorImp.obtenerFoto(idColaborador);
+        }
+        return null;
     }
 }
