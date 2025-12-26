@@ -78,4 +78,16 @@ public class EnvioWS {
             throw new BadRequestException("Error en el formato de la solicitud JSON: " + e.getMessage());
         }
     }
+
+    @GET
+    @Path("ultimoComentario/{idEnvio}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public String obtenerUltimoComentario(@PathParam("idEnvio") Integer idEnvio) {
+        if (idEnvio == null || idEnvio <= 0) {
+            throw new BadRequestException("ID de envío inválido");
+        }
+        String comentario = EnvioImp.obtenerUltimoComentario(idEnvio);
+        return comentario != null ? comentario : "";
+    }
+
 }

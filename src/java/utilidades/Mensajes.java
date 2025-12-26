@@ -76,7 +76,7 @@ public class Mensajes {
 
     // ENVÍO
     public static final String ENVIO_NO_ENCONTRADO = "El envío no existe con ese número de guía.";
-    public static final String ENVIO_ESTATUS_ACTUALIZADO = "Estatus del envío actualizado y registrado correctamente.";
+    public static final String ENVIO_ESTATUS_ACTUALIZADO = "Estatus del envio actualizado y registrado correctamente.";
     public static final String ENVIO_ESTATUS_NO_ACTUALIZADO = "No se pudo actualizar el estatus del envío.";
     public static final String ENVIO_ERROR_VALIDACION = "Error de validación: ";
     public static final String ENVIO_DATOS_INCOMPLETOS = "Datos incompletos (Guía, Estatus o Colaborador).";
