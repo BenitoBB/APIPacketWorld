@@ -90,6 +90,16 @@
         VALUES 
         (#{idEnvio}, #{idEstatus}, NOW(), #{comentario}, #{idColaborador})
     </insert>
+    
+    <select id="obtener-ultimo-comentario" parameterType="int" resultType="string">
+        SELECT comentario
+        FROM EstatusEnvioHistorial
+        WHERE idEnvio = #{idEnvio}
+        AND idEstatus IN (4,6)
+        ORDER BY fechaHora DESC
+        LIMIT 1
+    </select>
+
 </mapper>
 
 
