@@ -154,4 +154,16 @@ public class EnvioImp {
         }
         return respuesta;
     }
+
+    public static String obtenerUltimoComentario(int idEnvio) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        try {
+            return conexionBD.selectOne("envio.obtener-ultimo-comentario", idEnvio);
+        } finally {
+            if (conexionBD != null) {
+                conexionBD.close();
+            }
+        }
+    }
+
 }
