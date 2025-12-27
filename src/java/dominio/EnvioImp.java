@@ -1,8 +1,10 @@
 package dominio;
 
 import dto.RSActualizarEstatus;
+import dto.RSEnvio;
 import dto.RSEnvioDetalle;
 import dto.RSEnvioLista;
+import dto.RSEnvioTabla;
 import dto.Respuesta;
 import java.util.HashMap;
 import java.util.List;
@@ -164,6 +166,100 @@ public class EnvioImp {
                 conexionBD.close();
             }
         }
+    }
+
+    // METODOS NECESARIOS PARA CLIENTE FX
+    public static List<RSEnvioTabla> obtenerEnviosTabla() {
+        List<RSEnvioTabla> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("envio.obtener-envios-tabla");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return lista;
+    }
+
+    public static Respuesta registrarEnvio(RSEnvio envio) {
+
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD == null) {
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
+            return respuesta;
+        }
+
+        try {
+            conexionBD.insert("envio.insertar-direccion", envio);
+            System.out.println("ID DIRECCIÓN GENERADO: " + envio.getIdDireccion());
+
+            if (envio.getIdDireccion() == null) {
+                conexionBD.rollback();
+                respuesta.setMensaje("No se pudo registrar la dirección");
+                return respuesta;
+            }
+
+            conexionBD.insert("envio.registrar-envio", envio);
+
+            conexionBD.commit();
+            respuesta.setError(false);
+            respuesta.setMensaje(Mensajes.ENVIO_REGISTRADO);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            conexionBD.rollback();
+            respuesta.setMensaje(Mensajes.ERROR_DESCONOCIDO);
+        } finally {
+            conexionBD.close();
+        }
+
+        return respuesta;
+    }
+
+    public static Respuesta actualizarEnvio(RSEnvio envio) {
+
+        Respuesta respuesta = new Respuesta();
+        respuesta.setError(true);
+
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD == null) {
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
+            return respuesta;
+        }
+
+        try {
+            int filasEnvio = conexionBD.update("envio.actualizar-envio", envio);
+            int filasDireccion = 0;
+            if (envio.getCalle() != null) {
+                filasDireccion = conexionBD.update(
+                        "envio.actualizar-direccion-envio", envio
+                );
+            }
+            if (filasEnvio > 0 || filasDireccion > 0) {
+                conexionBD.commit();
+                respuesta.setError(false);
+                respuesta.setMensaje(Mensajes.ENVIO_ACTUALIZADO);
+            } else {
+                conexionBD.rollback();
+                respuesta.setMensaje(Mensajes.ENVIO_NO_ACTUALIZADO);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            conexionBD.rollback();
+            respuesta.setMensaje(Mensajes.ERROR_DESCONOCIDO);
+        } finally {
+            conexionBD.close();
+        }
+
+        return respuesta;
     }
 
 }

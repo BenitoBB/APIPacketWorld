@@ -7,76 +7,127 @@
 <mapper namespace="conductorUnidad">
     
     <!-- ====================================================== -->
-    <!-- ASIGNAR UNIDAD A CONDUCTOR (Insert nueva asignación)   -->
+    <!-- ASIGNAR UNIDAD A CONDUCTOR                             -->
     <!-- ====================================================== -->
-    <insert id="asignar-unidad" parameterType="pojo.ConductorUnidad">
-        INSERT INTO ConductorUnidad ( 
-        idColaborador, idUnidad, fechaAsignacion, activo 
-        ) VALUES ( 
-        #{idColaborador}, #{idUnidad}, NOW(), 1 
+    <insert id="asignar" parameterType="pojo.ConductorUnidad">
+        INSERT INTO ConductorUnidad (
+        idColaborador,
+        idUnidad,
+        fechaAsignacion,
+        activo
+        ) VALUES (
+        #{idColaborador},
+        #{idUnidad},
+        NOW(),
+        1
         )
     </insert>
 
+
     <!-- ====================================================== -->
-    <!-- DESASIGNAR (marcar activo = 0 y poner fecha fin)       -->
+    <!-- DESASIGNAR POR ID                                      -->
     <!-- ====================================================== -->
-    <update id="desasignar-unidad" parameterType="int">
-        UPDATE ConductorUnidad 
-        SET activo = 0, 
-        fechaDesasignacion = NOW() 
-        WHERE idConductorUnidad = #{idConductorUnidad} 
+    <update id="desasignar-por-id" parameterType="int">
+        UPDATE ConductorUnidad
+        SET activo = 0,
+        fechaDesasignacion = NOW()
+        WHERE idConductorUnidad = #{idConductorUnidad}
         AND activo = 1
     </update>
 
     <!-- ====================================================== -->
-    <!-- OBTENER UNIDAD ACTUAL DE UN CONDUCTOR                  -->
+    <!-- DESASIGNAR POR CONDUCTOR                               -->
     <!-- ====================================================== -->
-    <select id="unidad-actual-de-conductor" parameterType="int" resultType="pojo.ConductorUnidad">
-        SELECT * 
-        FROM ConductorUnidad 
-        WHERE idColaborador = #{idColaborador} 
-        AND activo = 1 
-        LIMIT 1
-    </select>
-
-    <!-- ====================================================== -->
-    <!-- OBTENER CONDUCTOR ACTUAL DE UNA UNIDAD                 -->
-    <!-- ====================================================== -->
-    <select id="conductor-actual-de-unidad" parameterType="int" resultType="pojo.ConductorUnidad">
-        SELECT * 
-        FROM ConductorUnidad 
-        WHERE idUnidad = #{idUnidad} 
-        AND activo = 1 
-        LIMIT 1
-    </select>
-
-    <!-- ====================================================== -->
-    <!-- HISTORIAL POR CONDUCTOR                                -->
-    <!-- ====================================================== -->
-    <select id="historial-por-conductor" parameterType="int" resultType="pojo.ConductorUnidad">
-        SELECT * 
-        FROM ConductorUnidad 
-        WHERE idColaborador = #{idColaborador} 
-        ORDER BY fechaAsignacion DESC
-    </select>
-
-    <!-- ====================================================== -->
-    <!-- HISTORIAL POR UNIDAD                                   -->
-    <!-- ====================================================== -->
-    <select id="historial-por-unidad" parameterType="int" resultType="pojo.ConductorUnidad">
-        SELECT * 
-        FROM ConductorUnidad 
-        WHERE idUnidad = #{idUnidad} 
-        ORDER BY fechaAsignacion DESC
-    </select>
-
-    <!-- ====================================================== -->
-    <!-- VALIDAR CONDUCTOR LIBRE (retorna 1 si tiene unidad)    -->
-    <!-- ====================================================== -->
-    <select id="validar-conductor-libre" parameterType="int" resultType="int">
-        SELECT COUNT(*) 
-        FROM ConductorUnidad 
-        WHERE idColaborador = #{idColaborador} 
+    <update id="desasignar-por-conductor" parameterType="int">
+        UPDATE ConductorUnidad
+        SET activo = 0,
+        fechaDesasignacion = NOW()
+        WHERE idColaborador = #{idColaborador}
         AND activo = 1
+    </update>
+
+
+    <!-- ====================================================== -->
+    <!-- DESASIGNAR POR UNIDAD                                  -->
+    <!-- ====================================================== -->
+    <update id="desasignar-por-unidad" parameterType="int">
+        UPDATE ConductorUnidad
+        SET activo = 0,
+        fechaDesasignacion = NOW()
+        WHERE idUnidad = #{idUnidad}
+        AND activo = 1
+    </update>
+
+
+    <!-- ====================================================== -->
+    <!-- UNIDAD ACTUAL CONDUCTOR                                -->
+    <!-- ====================================================== -->
+    <select id="unidad-actual-conductor"
+            parameterType="int"
+            resultType="pojo.ConductorUnidad">
+        SELECT *
+        FROM ConductorUnidad
+        WHERE idColaborador = #{idColaborador}
+        AND activo = 1
+        LIMIT 1
+    </select>
+
+
+    <!-- ====================================================== -->
+    <!-- CONDUCTOR ACTUAL UNIDAD                                -->
+    <!-- ====================================================== -->
+    <select id="conductor-actual-unidad"
+            parameterType="int"
+            resultType="pojo.ConductorUnidad">
+        SELECT *
+        FROM ConductorUnidad
+        WHERE idUnidad = #{idUnidad}
+        AND activo = 1
+        LIMIT 1
+    </select>
+
+
+    <!-- ====================================================== -->
+    <!-- HISTORIALES                                            -->
+    <!-- ====================================================== -->
+    <select id="historial-por-conductor"
+            parameterType="int"
+            resultType="pojo.ConductorUnidad">
+        SELECT *
+        FROM ConductorUnidad
+        WHERE idColaborador = #{idColaborador}
+        ORDER BY fechaAsignacion DESC
+    </select>
+
+    <select id="historial-por-unidad"
+            parameterType="int"
+            resultType="pojo.ConductorUnidad">
+        SELECT *
+        FROM ConductorUnidad
+        WHERE idUnidad = #{idUnidad}
+        ORDER BY fechaAsignacion DESC
+    </select>
+
+
+    <!-- ====================================================== -->
+    <!-- CONDUCTORES (TODOS)                                    -->
+    <!-- ====================================================== -->
+    <select id="conductores"
+            resultType="pojo.Colaborador">
+        SELECT c.*
+        FROM Colaborador c
+        INNER JOIN Rol r ON c.idRol = r.idRol
+        WHERE r.nombre = 'Conductor'
+    </select>
+
+
+    <!-- ====================================================== -->
+    <!-- UNIDADES ACTIVAS                                       -->
+    <!-- ====================================================== -->
+    <select id="unidades-activas"
+            resultType="pojo.Unidad">
+        SELECT *
+        FROM Unidad
+        WHERE estatus = 'Activa'
     </select>
 </mapper>

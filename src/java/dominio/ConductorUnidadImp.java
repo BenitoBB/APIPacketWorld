@@ -4,7 +4,9 @@ import dto.Respuesta;
 import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
+import pojo.Colaborador;
 import pojo.ConductorUnidad;
+import pojo.Unidad;
 import utilidades.Mensajes;
 
 /**
@@ -15,74 +17,42 @@ public class ConductorUnidadImp {
 
     // Asignar Unidad a Conductor
     public static Respuesta asignarUnidad(ConductorUnidad cu) {
+
         Respuesta respuesta = new Respuesta();
-        SqlSession conexionBD = MyBatisUtil.getSession();
+        SqlSession conexion = MyBatisUtil.getSession();
 
-        if (conexionBD != null) {
+        if (conexion != null) {
             try {
-
-                // VALIDAR que el conductor NO tenga asignación activa
-                int ocupadas = conexionBD.selectOne(
-                        "conductorUnidad.validar-conductor-libre",
+                conexion.update(
+                        "conductorUnidad.desasignar-por-conductor",
                         cu.getIdColaborador()
                 );
 
-                if (ocupadas > 0) {
-                    respuesta.setError(true);
-                    respuesta.setMensaje(Mensajes.ASIGNACION_EXISTE);
-                    return respuesta;
-                }
+                conexion.update(
+                        "conductorUnidad.desasignar-por-unidad",
+                        cu.getIdUnidad()
+                );
 
-                // Registrar nueva asignación
-                int filas = conexionBD.insert("conductorUnidad.asignar-unidad", cu);
-                conexionBD.commit();
+                int filas = conexion.insert(
+                        "conductorUnidad.asignar",
+                        cu
+                );
 
-                if (filas > 0) {
-                    respuesta.setError(false);
-                    respuesta.setMensaje(Mensajes.ASIGNACION_REALIZADA);
-                } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje(Mensajes.ASIGNACION_NO_REALIZADA);
-                }
+                conexion.commit();
 
-            } catch (Exception ex) {
+                respuesta.setError(filas <= 0);
+                respuesta.setMensaje(
+                        filas > 0
+                                ? Mensajes.ASIGNACION_REALIZADA
+                                : Mensajes.ASIGNACION_NO_REALIZADA
+                );
+
+            } catch (Exception e) {
+                conexion.rollback();
                 respuesta.setError(true);
-                respuesta.setMensaje(Mensajes.ASIGNACION_ERROR + ex.getMessage());
+                respuesta.setMensaje(Mensajes.ASIGNACION_ERROR + e.getMessage());
             } finally {
-                conexionBD.close();
-            }
-        } else {
-            respuesta.setError(true);
-            respuesta.setMensaje(Mensajes.SIN_CONEXION);
-        }
-
-        return respuesta;
-    }
-
-    // Desasignar Unidad (cerrar asignacion activa)
-    public static Respuesta desasignarUnidad(Integer idConductorUnidad) {
-        Respuesta respuesta = new Respuesta();
-        SqlSession conexionBD = MyBatisUtil.getSession();
-
-        if (conexionBD != null) {
-            try {
-
-                int filas = conexionBD.update("conductorUnidad.desasignar-unidad", idConductorUnidad);
-                conexionBD.commit();
-
-                if (filas > 0) {
-                    respuesta.setError(false);
-                    respuesta.setMensaje(Mensajes.DESASIGNACION_REALIZADA);
-                } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje(Mensajes.DESASIGNACION_NO_REALIZADA);
-                }
-
-            } catch (Exception ex) {
-                respuesta.setError(true);
-                respuesta.setMensaje(Mensajes.ASIGNACION_ERROR + ex.getMessage());
-            } finally {
-                conexionBD.close();
+                conexion.close();
             }
         } else {
             respuesta.setError(true);
@@ -100,7 +70,7 @@ public class ConductorUnidadImp {
         if (conexionBD != null) {
             try {
                 cu = conexionBD.selectOne(
-                        "conductorUnidad.unidad-actual-de-conductor",
+                        "conductorUnidad.unidad-actual-conductor",
                         idColaborador
                 );
             } catch (Exception ex) {
@@ -121,7 +91,7 @@ public class ConductorUnidadImp {
         if (conexionBD != null) {
             try {
                 cu = conexionBD.selectOne(
-                        "conductorUnidad.conductor-actual-de-unidad",
+                        "conductorUnidad.conductor-actual-unidad",
                         idUnidad
                 );
             } catch (Exception ex) {
@@ -172,21 +142,86 @@ public class ConductorUnidadImp {
         return lista;
     }
 
-    // Validación si el Conductor esta libre (sin asignar)
-    public static boolean conductorLibre(Integer idColaborador) {
-        SqlSession conexionBD = MyBatisUtil.getSession();
-        if (conexionBD != null) {
+    // Unidades disponibles
+    public static List<Unidad> obtenerUnidadesActivas() {
+        SqlSession conexion = MyBatisUtil.getSession();
+        try {
+            return conexion.selectList("conductorUnidad.unidades-activas");
+        } finally {
+            conexion.close();
+        }
+    }
+
+    // Conductores disponibles
+    public static List<Colaborador> obtenerConductores() {
+        SqlSession conexion = MyBatisUtil.getSession();
+        try {
+            return conexion.selectList("conductorUnidad.conductores");
+        } finally {
+            conexion.close();
+        }
+    }
+
+    // Desasignar por conductor
+    public static Respuesta desasignarPorConductor(Integer idColaborador) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexion = MyBatisUtil.getSession();
+
+        if (conexion != null) {
             try {
-                int contador = conexionBD.selectOne(
-                        "conductorUnidad.validar-conductor-libre",
+                int filas = conexion.update(
+                        "conductorUnidad.desasignar-por-conductor",
                         idColaborador
                 );
-                return contador == 0;
+                conexion.commit();
+
+                respuesta.setError(filas <= 0);
+                respuesta.setMensaje(
+                        filas > 0
+                                ? Mensajes.DESASIGNACION_REALIZADA
+                                : Mensajes.DESASIGNACION_NO_REALIZADA
+                );
+
+            } catch (Exception e) {
+                conexion.rollback();
+                respuesta.setError(true);
+                respuesta.setMensaje(Mensajes.DESASIGNACION_ERROR);
             } finally {
-                conexionBD.close();
+                conexion.close();
             }
         }
-        return false;
+        return respuesta;
+    }
+
+    // Desasignar por unidad
+    public static Respuesta desasignarPorUnidad(Integer idUnidad) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexion = MyBatisUtil.getSession();
+
+        if (conexion != null) {
+            try {
+                int filas = conexion.update(
+                        "conductorUnidad.desasignar-por-unidad",
+                        idUnidad
+                );
+                conexion.commit();
+
+                respuesta.setError(filas <= 0);
+                respuesta.setMensaje(
+                        filas > 0
+                                ? Mensajes.DESASIGNACION_REALIZADA
+                                : Mensajes.DESASIGNACION_NO_REALIZADA
+                );
+
+            } catch (Exception e) {
+                conexion.rollback();
+                respuesta.setError(true);
+                respuesta.setMensaje(Mensajes.DESASIGNACION_ERROR);
+            } finally {
+                conexion.close();
+            }
+        }
+        return respuesta;
     }
 
 }

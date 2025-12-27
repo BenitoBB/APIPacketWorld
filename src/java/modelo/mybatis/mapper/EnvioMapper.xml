@@ -102,6 +102,120 @@
         ORDER BY fechaHora DESC
         LIMIT 1
     </select>
+    
+    <!-- NECESARIOS PARA CLIENTE FX -->
+    <!-- LISTADO GENERAL DE ENVIOS PARA TABLA -->
+    <select id="obtener-envios-tabla"
+            resultType="dto.RSEnvioTabla">
+
+        SELECT  
+        e.idEnvio,
+        e.numeroGuia, 
+
+        CONCAT(ds.ciudad, ', ', ds.estado) AS sucursalOrigen, 
+
+        CONCAT(dd.ciudad, ', ', dd.estado) AS destino, 
+
+        es.nombre AS estatus, 
+
+        CONCAT(c.nombre, ' ', c.apellidoPaterno) AS conductor, 
+        e.costo AS costo
+
+        FROM Envio e 
+        JOIN Sucursal so  
+        ON e.idSucursalOrigen = so.idSucursal 
+        JOIN Direccion ds  
+        ON so.idDireccion = ds.idDireccion 
+
+        JOIN Direccion dd  
+        ON e.idDireccionDestino = dd.idDireccion 
+
+        JOIN Estatus es  
+        ON e.idEstatus = es.idEstatus 
+
+        LEFT JOIN Colaborador c  
+        ON e.idColaborador = c.idColaborador 
+
+        ORDER BY e.fechaEnvio DESC 
+
+    </select>
+
+    <!-- INSERTAR ENVÍO -->
+    <insert id="registrar-envio" parameterType="dto.RSEnvio">
+        INSERT INTO Envio 
+        ( 
+        numeroGuia, 
+        idClienteRemitente, 
+        idSucursalOrigen, 
+        idDireccionDestino, 
+        nombreDestinatario, 
+        apellidoPaternoDestinatario, 
+        apellidoMaternoDestinatario, 
+        costo, 
+        idEstatus, 
+        fechaEnvio 
+        ) 
+        VALUES 
+        ( 
+        #{numeroGuia}, 
+        #{idClienteRemitente}, 
+        #{idSucursalOrigen}, 
+        #{idDireccion}, 
+        #{nombreDestinatario}, 
+        #{apellidoPaternoDestinatario}, 
+        #{apellidoMaternoDestinatario}, 
+        #{costo}, 
+        1, 
+        NOW() 
+        ) 
+    </insert>
+    
+    <!-- INSERTAR DIRECCIÓN -->
+    <insert id="insertar-direccion"
+            parameterType="dto.RSEnvio"
+            useGeneratedKeys="true"
+            keyProperty="idDireccion"
+            keyColumn="idDireccion">
+             
+        INSERT INTO Direccion 
+        (calle, numero, colonia, codigoPostal, ciudad, estado) 
+        VALUES 
+        (#{calle}, #{numero}, #{colonia}, #{codigoPostal}, #{ciudad}, #{estado}) 
+    </insert>
+    
+    <!-- INSERTAR PAQUETES -->
+    <insert id="insertar-paquete" parameterType="pojo.Paquete">
+        INSERT INTO Paquete
+        (descripcion, peso, alto, ancho, profundidad, idEnvio)
+        VALUES
+        (#{descripcion}, #{peso}, #{alto}, #{ancho}, #{profundidad}, #{idEnvio})
+    </insert>
+    
+    <!-- ACTUALIZAR ENVÍO -->
+    <update id="actualizar-envio" parameterType="dto.RSEnvio">
+        UPDATE Envio 
+        SET 
+        idClienteRemitente = #{idClienteRemitente}, 
+        idSucursalOrigen = #{idSucursalOrigen}, 
+        nombreDestinatario = #{nombreDestinatario}, 
+        apellidoPaternoDestinatario = #{apellidoPaternoDestinatario}, 
+        apellidoMaternoDestinatario = #{apellidoMaternoDestinatario} 
+        WHERE numeroGuia = #{numeroGuia} 
+    </update>
+    
+    <!-- ACTUALIZAR DIRECCIÓN -->
+    <update id="actualizar-direccion-envio" parameterType="dto.RSEnvio">
+        UPDATE Direccion d  
+        JOIN Envio e ON e.idDireccionDestino = d.idDireccion  
+        SET  
+        d.calle = #{calle},  
+        d.numero = #{numero},  
+        d.colonia = #{colonia}, 
+        d.codigoPostal = #{codigoPostal}, 
+        d.ciudad = #{ciudad}, 
+        d.estado = #{estado} 
+        WHERE e.numeroGuia = #{numeroGuia} 
+    </update>
 
 </mapper>
 

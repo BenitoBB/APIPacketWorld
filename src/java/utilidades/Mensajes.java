@@ -63,6 +63,7 @@ public class Mensajes {
     public static final String UNIDAD_BAJA = "Unidad dada de baja correctamente.";
     public static final String UNIDAD_NO_BAJA = "No se pudo dar de baja la unidad.";
     public static final String UNIDAD_NO_EXISTE = "No existe la unidad solicitada.";
+    public static final String UNIDAD_OCUPADA = "La unidad ya está asignada a otro conductor.";
     public static final String UNIDAD_ERROR = "Error en operación de unidad: ";
 
     // CONDUCTOR-UNIDAD 
@@ -70,16 +71,18 @@ public class Mensajes {
     public static final String ASIGNACION_NO_REALIZADA = "No se pudo asignar la unidad.";
     public static final String DESASIGNACION_REALIZADA = "Unidad desasignada correctamente.";
     public static final String DESASIGNACION_NO_REALIZADA = "No se encontró asignación activa.";
+    public static final String DESASIGNACION_ERROR = "No se pudo hacer la desasignación.";
     public static final String ASIGNACION_ERROR = "Error en asignación/desasignación de unidad: ";
     public static final String ASIGNACION_EXISTE = "El conductor ya tiene una unidad asignada.";
     public static final String ASIGNACION_NO_EXISTE = "No se encontró la asignación.";
 
     // ENVÍO
+    public static final String ENVIO_REGISTRADO = "Envío registrado correctamente.";
     public static final String ENVIO_NO_ENCONTRADO = "El envío no existe con ese número de guía.";
-    public static final String ENVIO_ESTATUS_ACTUALIZADO = "Estatus del envio actualizado y registrado correctamente.";
+    public static final String ENVIO_ESTATUS_ACTUALIZADO = "Estatus del envío actualizado y registrado correctamente.";
     public static final String ENVIO_ESTATUS_NO_ACTUALIZADO = "No se pudo actualizar el estatus del envío.";
     public static final String ENVIO_ERROR_VALIDACION = "Error de validación: ";
     public static final String ENVIO_DATOS_INCOMPLETOS = "Datos incompletos (Guía, Estatus o Colaborador).";
-    
- 
+    public static final String ENVIO_ACTUALIZADO = "Envío actualizado correctamente.";
+    public static final String ENVIO_NO_ACTUALIZADO = "No se pudo actualizar el envío.";
 }

@@ -12,7 +12,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import pojo.Colaborador;
 import pojo.ConductorUnidad;
+import pojo.Unidad;
 
 /**
  *
@@ -37,17 +39,6 @@ public class ConductorUnidadWS {
             return ConductorUnidadImp.asignarUnidad(cu);
         }
         throw new BadRequestException("Faltan parámetros idColaborador o idUnidad.");
-    }
-
-    // Desasignar Unidad de Conductor
-    @PUT
-    @Path("desasignar/{idConductorUnidad}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta desasignarUnidad(@PathParam("idConductorUnidad") Integer idConductorUnidad) {
-        if (idConductorUnidad != null) {
-            return ConductorUnidadImp.desasignarUnidad(idConductorUnidad);
-        }
-        throw new BadRequestException("Falta idConductorUnidad.");
     }
 
     // Obtener Undiad actual asignada a Conductor
@@ -106,17 +97,40 @@ public class ConductorUnidadWS {
         return ConductorUnidadImp.historialPorUnidad(idUnidad);
     }
 
-    // Validar si Conductor esta disponible
+    // Todos los Conductores
     @GET
-    @Path("validar/{idColaborador}")
+    @Path("conductores")
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta validarConductorLibre(@PathParam("idColaborador") Integer idColaborador) {
-        Respuesta respuesta = new Respuesta();
-        boolean libre = ConductorUnidadImp.conductorLibre(idColaborador);
-
-        respuesta.setError(false);
-        respuesta.setMensaje(libre ? "Conductor libre" : "Conductor ocupado");
-
-        return respuesta;
+    public List<Colaborador> conductores() {
+        return ConductorUnidadImp.obtenerConductores();
     }
+
+    // Unidades Activas
+    @GET
+    @Path("unidades-activas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Unidad> unidadesActivas() {
+        return ConductorUnidadImp.obtenerUnidadesActivas();
+    }
+
+    @PUT
+    @Path("desasignar/conductor/{idColaborador}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta desasignarPorConductor(@PathParam("idColaborador") Integer idColaborador) {
+        if (idColaborador != null) {
+            return ConductorUnidadImp.desasignarPorConductor(idColaborador);
+        }
+        throw new BadRequestException("Falta idColaborador");
+    }
+
+    @PUT
+    @Path("desasignar/unidad/{idUnidad}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta desasignarPorUnidad(@PathParam("idUnidad") Integer idUnidad) {
+        if (idUnidad != null) {
+            return ConductorUnidadImp.desasignarPorUnidad(idUnidad);
+        }
+        throw new BadRequestException("Falta idUnidad");
+    }
+
 }

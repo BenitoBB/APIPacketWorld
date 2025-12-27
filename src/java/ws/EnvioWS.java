@@ -3,13 +3,16 @@ package ws;
 import com.google.gson.Gson;
 import dominio.EnvioImp;
 import dto.RSActualizarEstatus;
+import dto.RSEnvio;
 import dto.RSEnvioDetalle;
 import dto.RSEnvioLista;
+import dto.RSEnvioTabla;
 import dto.Respuesta;
 import java.util.List;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -88,6 +91,63 @@ public class EnvioWS {
         }
         String comentario = EnvioImp.obtenerUltimoComentario(idEnvio);
         return comentario != null ? comentario : "";
+    }
+
+    @GET
+    @Path("tabla")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public List<RSEnvioTabla> obtenerEnviosTabla() {
+        return EnvioImp.obtenerEnviosTabla();
+    }
+
+    @PUT
+    @Path("actualizar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta actualizarEnvio(String json) {
+
+        Gson gson = new Gson();
+        RSEnvio envio = gson.fromJson(json, RSEnvio.class);
+
+        if (envio == null || envio.getNumeroGuia() == null) {
+            throw new BadRequestException("Número de guía requerido");
+        }
+
+        if (envio.getCosto() != null) {
+            throw new BadRequestException("El costo del envío no puede ser modificado");
+        }
+
+        return EnvioImp.actualizarEnvio(envio);
+    }
+
+    @POST
+    @Path("registrar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta registrarEnvio(String json) {
+
+        Gson gson = new Gson();
+        RSEnvio envio = gson.fromJson(json, RSEnvio.class);
+
+        if (envio == null
+                || envio.getNumeroGuia() == null
+                || envio.getIdClienteRemitente() == null
+                || envio.getIdSucursalOrigen() == null
+                // DIRECCIÓN COMPLETA
+                || envio.getCalle() == null
+                || envio.getNumero() == null
+                || envio.getColonia() == null
+                || envio.getCodigoPostal() == null
+                || envio.getCiudad() == null
+                || envio.getEstado() == null
+                // DESTINATARIO
+                || envio.getNombreDestinatario() == null
+                || envio.getApellidoPaternoDestinatario() == null
+                || envio.getCosto() == null) {
+            throw new BadRequestException(Mensajes.ENVIO_DATOS_INCOMPLETOS);
+        }
+
+        return EnvioImp.registrarEnvio(envio);
     }
 
 }
