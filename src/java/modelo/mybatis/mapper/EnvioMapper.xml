@@ -43,6 +43,7 @@
         e.apellidoMaternoDestinatario AS apellidoMaternoDestinatario,
 
         -- Cliente remitente
+        c.idCliente AS idClienteRemitente,
         c.nombre AS clienteNombre,
         c.apellidoPaterno AS clienteApellidoPaterno,
         c.apellidoMaterno AS clienteApellidoMaterno,
@@ -61,7 +62,9 @@
         dir.estado AS dirEstado,
 
         -- Estatus del envío
-        est.descripcion AS estatus
+        est.descripcion AS estatus,
+ 
+        e.costo AS costo
 
         FROM envio e
         JOIN cliente c ON e.idClienteRemitente = c.idCliente

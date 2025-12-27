@@ -1,5 +1,6 @@
 package dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 import pojo.Direccion;
 import pojo.Paquete;
@@ -8,35 +9,30 @@ public class RSEnvioDetalle {
 
     private int idEnvio;
     private String numeroGuia;
-
     private String fechaEnvio;
     private String fechaEntrega;
-
     private String nombreDestinatario;
     private String apellidoPaternoDestinatario;
     private String apellidoMaternoDestinatario;
-
     private String clienteNombre;
     private String clienteApellidoPaterno;
     private String clienteApellidoMaterno;
     private String clienteTelefono;
     private String clienteCorreo;
-
     private String sucursalOrigen;
-
     private String dirCalle;
     private String dirNumero;
     private String dirColonia;
     private String dirCP;
     private String dirCiudad;
     private String dirEstado;
-
+    private Integer idClienteRemitente;
     private String estatus;
     private List<Paquete> paquetes;
+    private BigDecimal costo;
 
-
-
-    public RSEnvioDetalle() {}
+    public RSEnvioDetalle() {
+    }
 
     public int getIdEnvio() {
         return idEnvio;
@@ -118,6 +114,22 @@ public class RSEnvioDetalle {
         return estatus;
     }
 
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public Integer getIdClienteRemitente() {
+        return idClienteRemitente;
+    }
+
+    public void setIdClienteRemitente(Integer idClienteRemitente) {
+        this.idClienteRemitente = idClienteRemitente;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
+    }
+
     public void setIdEnvio(int idEnvio) {
         this.idEnvio = idEnvio;
     }
@@ -197,17 +209,13 @@ public class RSEnvioDetalle {
     public void setEstatus(String estatus) {
         this.estatus = estatus;
     }
-    
-    
+
     public List<Paquete> getPaquetes() {
-    return paquetes;
+        return paquetes;
     }
 
     public void setPaquetes(List<Paquete> paquetes) {
         this.paquetes = paquetes;
     }
-    
 
-    
-    
 }
