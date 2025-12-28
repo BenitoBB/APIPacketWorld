@@ -262,4 +262,69 @@ public class EnvioImp {
         return respuesta;
     }
 
+    public static Respuesta asignarConductor(String numeroGuia, Integer idColaborador) {
+        Respuesta r = new Respuesta();
+        SqlSession conexion = MyBatisUtil.getSession();
+
+        try {
+
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("numeroGuia", numeroGuia);
+            parametros.put("idColaborador", idColaborador);
+
+            int filas = conexion.update("envio.asignar-conductor", parametros);
+
+            conexion.commit();
+
+            r.setError(filas <= 0);
+            r.setMensaje(filas > 0
+                    ? "Conductor asignado correctamente"
+                    : "No se pudo asignar el conductor");
+        } catch (Exception e) {
+            conexion.rollback();
+            r.setError(true);
+            r.setMensaje("Error al asignar conductor");
+        } finally {
+            conexion.close();
+        }
+        return r;
+    }
+
+    public static Respuesta desasignarConductor(String numeroGuia) {
+
+        Respuesta r = new Respuesta();
+        r.setError(true);
+
+        SqlSession conexion = MyBatisUtil.getSession();
+
+        if (conexion == null) {
+            r.setMensaje(Mensajes.SIN_CONEXION);
+            return r;
+        }
+
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("numeroGuia", numeroGuia);
+
+            int filas = conexion.update("envio.desasignar-conductor", params);
+            conexion.commit();
+
+            if (filas > 0) {
+                r.setError(false);
+                r.setMensaje("Conductor desasignado correctamente");
+            } else {
+                r.setMensaje("No se pudo desasignar el conductor");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            conexion.rollback();
+            r.setMensaje("Error al desasignar conductor");
+        } finally {
+            conexion.close();
+        }
+
+        return r;
+    }
+
 }

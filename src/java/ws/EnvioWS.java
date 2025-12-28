@@ -150,4 +150,21 @@ public class EnvioWS {
         return EnvioImp.registrarEnvio(envio);
     }
 
+    @PUT
+    @Path("asignar/{guia}/{idColaborador}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta asignar(
+            @PathParam("guia") String guia,
+            @PathParam("idColaborador") Integer idColaborador
+    ) {
+        return EnvioImp.asignarConductor(guia, idColaborador);
+    }
+
+    @PUT
+    @Path("desasignar/{guia}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta desasignar(@PathParam("guia") String guia) {
+        return EnvioImp.desasignarConductor(guia);
+    }
+
 }

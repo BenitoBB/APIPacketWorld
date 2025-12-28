@@ -216,6 +216,21 @@
         d.estado = #{estado} 
         WHERE e.numeroGuia = #{numeroGuia} 
     </update>
+    
+    <!-- ASIGNAR UN CONDUCTOR A ENVÍO -->
+    <update id="asignar-conductor">
+        UPDATE Envio
+        SET idColaborador = #{idColaborador}
+        WHERE numeroGuia = #{numeroGuia}
+    </update>
+
+    <!-- DESASIGNAR UN CONDUCTOR A ENVÍO -->
+    <update id="desasignar-conductor">
+        UPDATE Envio
+        SET idColaborador = NULL
+        WHERE numeroGuia = #{numeroGuia}
+    </update>
+
 
 </mapper>
 
