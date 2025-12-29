@@ -79,11 +79,25 @@
     <!-- ============================= -->
     <!-- BUSCAR POR NO PERSONAL        -->
     <!-- ============================= -->
-    <select id="buscar-por-noPersonal" parameterType="string" resultType="pojo.Colaborador">
-        SELECT * 
+    <select id="buscar-por-noPersonal"
+            parameterType="string"
+            resultType="pojo.Colaborador">
+        SELECT
+        idColaborador,
+        noPersonal,
+        nombre,
+        apellidoPaterno,
+        apellidoMaterno,
+        curp,
+        correo,
+        telefono,
+        numeroLicencia,
+        idRol,
+        idSucursal 
         FROM Colaborador 
-        WHERE noPersonal = #{noPersonal}
+        WHERE noPersonal = #{noPersonal} 
     </select>
+
 
     <!-- ============================= -->
     <!-- BUSCAR POR ROL                -->
@@ -167,4 +181,24 @@
         FROM Colaborador
         WHERE idColaborador = #{idColaborador}
     </select>
+    
+    
+    <!-- ============================= -->
+    <!-- GUARDAR FOTO ESCRITORIO FX   -->
+    <!-- ============================= -->
+    <update id="guardar-foto-escritorio" parameterType="pojo.Colaborador">
+        UPDATE Colaborador  
+        SET foto = #{foto, jdbcType=BLOB} 
+        WHERE idColaborador = #{idColaborador} 
+    </update>
+
+    <!-- ============================= -->
+    <!-- OBTENER FOTO CLIENTE FX       -->
+    <!-- ============================= -->
+    <select id="obtener-foto-escritorio" parameterType="int" resultType="pojo.Colaborador">
+        SELECT idColaborador, foto 
+        FROM Colaborador 
+        WHERE idColaborador = #{idColaborador} 
+    </select>
+
 </mapper>

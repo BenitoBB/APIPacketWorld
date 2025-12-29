@@ -188,4 +188,32 @@ public class ColaboradorWS {
         }
         return null;
     }
+
+    @PUT
+    @Path("escritorio/subir-foto/{idColaborador}")
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta subirFotoEscritorio(
+            @PathParam("idColaborador") Integer idColaborador,
+            byte[] foto) {
+
+        if (idColaborador != null && idColaborador > 0
+                && foto != null && foto.length > 0) {
+            return ColaboradorImp.guardarFotoEscritorio(idColaborador, foto);
+        }
+
+        Respuesta r = new Respuesta();
+        r.setError(true);
+        r.setMensaje("Datos inválidos");
+        return r;
+    }
+
+    @GET
+    @Path("escritorio/obtener-foto/{idColaborador}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public byte[] obtenerFotoEscritorio(
+            @PathParam("idColaborador") Integer idColaborador) {
+        return ColaboradorImp.obtenerFotoEscritorio(idColaborador);
+    }
+
 }
