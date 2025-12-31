@@ -80,4 +80,28 @@ public class PaqueteWS {
         throw new BadRequestException("ID de paquete requerido.");
     }
 
+    // Asignar Paquete a un Envío
+    @PUT
+    @Path("asignar/{idPaquete}/{idEnvio}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta asignar(
+            @PathParam("idPaquete") Integer idPaquete,
+            @PathParam("idEnvio") Integer idEnvio) {
+
+        return PaqueteImp.asignarEnvio(idPaquete, idEnvio);
+    }
+
+    @PUT
+    @Path("desasignar/{idPaquete}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta desasignar(
+            @PathParam("idPaquete") Integer idPaquete) {
+
+        if (idPaquete != null) {
+            return PaqueteImp.desasignarEnvio(idPaquete);
+        }
+
+        throw new BadRequestException("ID de paquete requerido.");
+    }
+
 }

@@ -57,5 +57,23 @@
         WHERE idPaquete = #{idPaquete} 
     </delete>
 
+    <!-- ================================ -->
+    <!-- ASIGNAR PAQUETE A ENVÍO          -->
+    <!-- ================================ -->
+    <update id="asignar-envio">
+        UPDATE Paquete
+        SET idEnvio = #{idEnvio}
+        WHERE idPaquete = #{idPaquete}
+    </update>
+
+    <!-- ================================ -->
+    <!-- DESASIGNAR PAQUETE A ENVÍO       -->
+    <!-- ================================ -->
+    <update id="desasignar-envio">
+        UPDATE Paquete
+        SET idEnvio = NULL
+        WHERE idPaquete = #{idPaquete}
+    </update>
+
    
 </mapper>

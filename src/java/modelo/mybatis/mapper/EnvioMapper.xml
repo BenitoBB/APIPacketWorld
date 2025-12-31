@@ -117,6 +117,7 @@
         CONCAT(dd.ciudad, ', ', dd.estado) AS destino, 
 
         es.nombre AS estatus, 
+        es.idEstatus AS idEstatus, 
 
         CONCAT(c.nombre, ' ', c.apellidoPaterno) AS conductor, 
         e.costo AS costo

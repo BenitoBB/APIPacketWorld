@@ -47,7 +47,7 @@
     <!-- ============================= -->
     <select id="obtener-conductores" resultType="pojo.Colaborador">
         SELECT idColaborador, noPersonal, nombre, apellidoPaterno, 
-               apellidoMaterno, curp, correo, telefono, foto, 
+               apellidoMaterno, curp, correo, telefono,  
                password, numeroLicencia, idRol, idSucursal 
         FROM Colaborador
         WHERE idRol = 3  <!-- 3 = Conductor -->
