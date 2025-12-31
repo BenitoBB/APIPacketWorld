@@ -114,11 +114,17 @@
     <!-- ====================================================== -->
     <select id="conductores"
             resultType="pojo.Colaborador">
-        SELECT c.*
-        FROM Colaborador c
-        INNER JOIN Rol r ON c.idRol = r.idRol
-        WHERE r.nombre = 'Conductor'
-    </select>
+        SELECT  
+        c.idColaborador, 
+        c.nombre, 
+        c.apellidoPaterno, 
+        c.apellidoMaterno, 
+        c.noPersonal, 
+        c.numeroLicencia 
+        FROM Colaborador c 
+        INNER JOIN Rol r ON c.idRol = r.idRol 
+        WHERE r.nombre = 'Conductor' 
+    </select> 
 
 
     <!-- ====================================================== -->

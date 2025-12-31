@@ -41,6 +41,13 @@
             <file>file:/C:/Users/ohana/OneDrive/Documentos/NetBeansProjects/APIPacketWorld/src/java/ws/DireccionWS.java</file>
             <file>file:/C:/Users/ohana/OneDrive/Documentos/NetBeansProjects/APIPacketWorld/src/java/dto/RSActualizarEstatus.java</file>
             <file>file:/C:/Users/ohana/OneDrive/Documentos/NetBeansProjects/APIPacketWorld/src/java/pojo/Cliente.java</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/CatalogoMapper.xml</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/ws/PaqueteWS.java</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/dto/RSEnvioTabla.java</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/PaqueteMapper.xml</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/ConductorUnidadMapper.xml</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/dominio/PaqueteImp.java</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/EnvioMapper.xml</file>
         </group>
     </open-files>
 </project-private>
