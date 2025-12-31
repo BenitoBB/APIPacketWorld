@@ -327,4 +327,21 @@ public class EnvioImp {
         return r;
     }
 
+    public static List<EstatusEnvioHistorial> obtenerHistorialEnvio(int idEnvio) {
+        List<EstatusEnvioHistorial> historial = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                historial = conexionBD.selectList(
+                        "envio.obtener-historial-envio",
+                        idEnvio
+                );
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return historial;
+    }
+
 }

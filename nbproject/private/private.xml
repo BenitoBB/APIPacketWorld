@@ -3,10 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/ws/UnidadWS.java</file>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/dominio/UnidadImp.java</file>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/utilidades/Mensajes.java</file>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/UnidadMapper.xml</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/ws/ClienteWS.java</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mybatis-config.xml</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/ClienteMapper.xml</file>
         </group>
     </open-files>
 </project-private>
