@@ -231,7 +231,24 @@
         WHERE numeroGuia = #{numeroGuia}
     </update>
 
+    <select id="obtener-historial-envio"
+            parameterType="int"
+            resultType="pojo.EstatusEnvioHistorial">
 
+        SELECT
+        h.idHistorial,
+        h.comentario,
+        h.fechaHora,
+        h.idEnvio,
+        h.idEstatus,
+        h.idColaborador,
+        e.nombre AS nombreEstatus
+        FROM estatusenviohistorial h
+        INNER JOIN estatus e ON h.idEstatus = e.idEstatus
+        WHERE h.idEnvio = #{idEnvio}
+        ORDER BY h.fechaHora DESC
+
+    </select>
 </mapper>
 
 

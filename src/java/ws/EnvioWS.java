@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import pojo.EstatusEnvioHistorial;
 import utilidades.Mensajes;
 
 @Path("envio")
@@ -165,6 +166,19 @@ public class EnvioWS {
     @Produces(MediaType.APPLICATION_JSON)
     public Respuesta desasignar(@PathParam("guia") String guia) {
         return EnvioImp.desasignarConductor(guia);
+    }
+
+    @GET
+    @Path("historial/{idEnvio}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public List<EstatusEnvioHistorial> obtenerHistorialEnvio(
+            @PathParam("idEnvio") int idEnvio) {
+
+        if (idEnvio <= 0) {
+            throw new BadRequestException("ID de envío inválido");
+        }
+
+        return EnvioImp.obtenerHistorialEnvio(idEnvio);
     }
 
 }

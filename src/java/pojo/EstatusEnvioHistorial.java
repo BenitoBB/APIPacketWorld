@@ -15,6 +15,7 @@ public class EstatusEnvioHistorial {
     private Integer idEnvio;
     private Integer idEstatus;
     private Integer idColaborador;
+    private String nombreEstatus;
 
     public EstatusEnvioHistorial() {
     }
@@ -75,4 +76,13 @@ public class EstatusEnvioHistorial {
     public Integer getIdColaborador() {
         return idColaborador;
     }
+
+    public String getNombreEstatus() {
+        return nombreEstatus;
+    }
+
+    public void setNombreEstatus(String nombreEstatus) {
+        this.nombreEstatus = nombreEstatus;
+    }
+    
 }
