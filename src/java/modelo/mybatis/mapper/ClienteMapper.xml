@@ -145,6 +145,4 @@
         WHERE telefono = #{telefono} 
         AND idCliente != #{idCliente} 
     </select>
-
-
 </mapper>

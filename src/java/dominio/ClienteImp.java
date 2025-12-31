@@ -134,7 +134,7 @@ public class ClienteImp {
                 // ACTUALIZAR CLIENTE
                 int filasCliente = conexionBD.update("cliente.actualizar-cliente", cliente);
                 if (filasCliente > 0) {
-                    conexionBD.commit(); 
+                    conexionBD.commit();
                     respuesta.setError(false);
                     respuesta.setMensaje(Mensajes.CLIENTE_ACTUALIZADO);
                 } else {
@@ -165,6 +165,15 @@ public class ClienteImp {
         if (conexionBD != null) {
 
             try {
+                // VALIDAR RELACIONES
+                if (EnvioImp.clienteTieneEnvios(idCliente)) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(
+                            "No se puede eliminar el cliente porque tiene envíos asociados.\n"
+                            + "Elimine primero los envíos o reasigne el cliente."
+                    );
+                    return respuesta;
+                }
                 int filas = conexionBD.delete("cliente.eliminar-cliente", idCliente);
                 conexionBD.commit();
 

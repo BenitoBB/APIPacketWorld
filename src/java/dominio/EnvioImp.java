@@ -344,4 +344,22 @@ public class EnvioImp {
         return historial;
     }
 
+    public static boolean clienteTieneEnvios(int idCliente) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean tiene = false;
+
+        if (conexionBD != null) {
+            try {
+                Integer count = conexionBD.selectOne(
+                        "envio.contar-envios-por-cliente",
+                        idCliente
+                );
+                tiene = count != null && count > 0;
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return tiene;
+    }
+
 }
