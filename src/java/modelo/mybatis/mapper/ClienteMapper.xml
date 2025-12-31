@@ -71,7 +71,7 @@
         idDireccion = #{idDireccion} 
         WHERE idCliente = #{idCliente}
     </update>
-
+  
     <!-- ====================================================== -->
     <!-- ELIMINAR CLIENTE                                       -->
     <!-- ====================================================== -->
@@ -108,4 +108,43 @@
         FROM Cliente 
         WHERE correo LIKE CONCAT('%', #{param}, '%')
     </select>
+    
+    <!-- ====================================================== -->
+    <!-- VALIDAR CORREO EXISTENTE                               -->
+    <!-- ====================================================== -->
+    <select id="existe-correo"
+            parameterType="string"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM Cliente 
+        WHERE correo = #{_parameter} 
+    </select>
+
+    <select id="existe-correo-excluyendo-id"
+            parameterType="map"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM Cliente 
+        WHERE correo = #{correo} 
+        AND idCliente != #{idCliente} 
+    </select>
+    
+    <!-- ====================================================== -->
+    <!-- VALIDAR TELEFONO EXISTENTE                             -->
+    <!-- ====================================================== -->
+    <select id="existe-telefono"
+            parameterType="string"
+            resultType="int">
+        SELECT COUNT(*) FROM Cliente WHERE telefono = #{_parameter} 
+    </select>
+
+    <select id="existe-telefono-excluyendo-id"
+            parameterType="map"
+            resultType="int">
+        SELECT COUNT(*) FROM Cliente 
+        WHERE telefono = #{telefono} 
+        AND idCliente != #{idCliente} 
+    </select>
+
+
 </mapper>

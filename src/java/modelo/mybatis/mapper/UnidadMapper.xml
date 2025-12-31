@@ -77,4 +77,28 @@
         FROM Unidad 
         WHERE numeroIdentificacionInterno LIKE CONCAT('%', #{_parameter}, '%')
     </select>
+    
+    <!-- ===================================== -->
+    <!-- VALIDAR VIN EXISTENTE (INSERT)        -->
+    <!-- ===================================== -->
+    <select id="existe-vin"
+            parameterType="string"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM Unidad 
+        WHERE vin = #{_parameter}
+    </select>
+
+    <!-- ===================================== -->
+    <!-- VALIDAR VIN EXISTENTE (UPDATE)        -->
+    <!-- ===================================== -->
+    <select id="existe-vin-excluyendo-id"
+            parameterType="map"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM Unidad 
+        WHERE vin = #{vin} 
+        AND idUnidad != #{idUnidad}
+    </select>
+
 </mapper>

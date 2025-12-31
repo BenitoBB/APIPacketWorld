@@ -80,6 +80,27 @@ public class ColaboradorImp {
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
             try {
+                // VALIDACIÓN DE NEGOCIO
+                if (existeNoPersonal(colaborador.getNoPersonal())) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("El número de personal ya está registrado.");
+                    return respuesta;
+                }
+                if (existeCampo("curp", colaborador.getCurp())) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_CURP);
+                    return respuesta;
+                }
+                if (existeCampo("correo", colaborador.getCurp())) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_CORREO);
+                    return respuesta;
+                }
+                if (existeCampo("numeroLicencia", colaborador.getCurp())) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_NUM_LICENCIA);
+                    return respuesta;
+                }
                 int filas = conexionBD.insert("colaborador.insertar-colaborador", colaborador);
                 conexionBD.commit();
 
@@ -92,8 +113,22 @@ public class ColaboradorImp {
                     respuesta.setMensaje(Mensajes.COLABORADOR_NO_REGISTRADO);
                 }
             } catch (Exception ex) {
+
+                String msg = ex.getMessage().toLowerCase();
+
                 respuesta.setError(true);
-                respuesta.setMensaje(Mensajes.COLABORADOR_ERROR + ex.getMessage());
+
+                if (msg.contains("nopersonal")) {
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_NO_PERSONAL);
+                } else if (msg.contains("curp")) {
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_CURP);
+                } else if (msg.contains("correo")) {
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_CORREO);
+                } else if (msg.contains("numeroLicencia")) {
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_NUM_LICENCIA);
+                } else {
+                    respuesta.setMensaje(Mensajes.COLABORADOR_ERROR);
+                }
             } finally {
                 conexionBD.close();
             }
@@ -111,6 +146,38 @@ public class ColaboradorImp {
 
         if (conexionBD != null) {
             try {
+                // VALIDACIONES UNIQUE (UPDATE)
+                if (existeCampoExcluyendoId(
+                        "curp",
+                        colaborador.getCurp(),
+                        colaborador.getIdColaborador()
+                )) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_CURP);
+                    return respuesta;
+                }
+
+                if (existeCampoExcluyendoId(
+                        "correo",
+                        colaborador.getCorreo(),
+                        colaborador.getIdColaborador()
+                )) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_CORREO);
+                    return respuesta;
+                }
+                if (colaborador.getNumeroLicencia() != null
+                        && existeCampoExcluyendoId(
+                                "numeroLicencia",
+                                colaborador.getNumeroLicencia(),
+                                colaborador.getIdColaborador()
+                        )) {
+
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_NUM_LICENCIA);
+                    return respuesta;
+                }
+
                 int filas = conexionBD.update("colaborador.actualizar-colaborador", colaborador);
                 conexionBD.commit();
 
@@ -467,6 +534,80 @@ public class ColaboradorImp {
             }
         }
         return foto;
+    }
+
+    // Validar NoPersonal Existente
+    public static boolean existeNoPersonal(String noPersonal) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean existe = false;
+
+        if (conexionBD != null) {
+            try {
+                Integer conteo = conexionBD.selectOne(
+                        "colaborador.existe-noPersonal",
+                        noPersonal
+                );
+                existe = conteo != null && conteo > 0;
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return existe;
+    }
+
+    // Validar si un campo UNIQUE ya existe (curp, correo, etc.)
+    public static boolean existeCampo(String campo, String valor) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean existe = false;
+
+        if (conexionBD != null) {
+            try {
+                HashMap<String, Object> parametros = new HashMap<>();
+                parametros.put("campo", campo);
+                parametros.put("valor", valor);
+
+                Integer conteo = conexionBD.selectOne(
+                        "colaborador.existe-campo",
+                        parametros
+                );
+
+                existe = conteo != null && conteo > 0;
+
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return existe;
+    }
+
+    // Validar UNIQUE en actualización (excluyendo el mismo id)
+    public static boolean existeCampoExcluyendoId(
+            String campo,
+            String valor,
+            int idColaborador
+    ) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean existe = false;
+
+        if (conexionBD != null) {
+            try {
+                HashMap<String, Object> parametros = new HashMap<>();
+                parametros.put("campo", campo);
+                parametros.put("valor", valor);
+                parametros.put("idColaborador", idColaborador);
+
+                Integer conteo = conexionBD.selectOne(
+                        "colaborador.existe-campo-excluyendo-id",
+                        parametros
+                );
+
+                existe = conteo != null && conteo > 0;
+
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return existe;
     }
 
 }

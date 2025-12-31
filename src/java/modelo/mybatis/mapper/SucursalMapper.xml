@@ -99,8 +99,6 @@
         WHERE s.idSucursal = #{idSucursal} 
     </select>
 
-
-
     <!-- ====================================================== -->
     <!-- BUSCAR SUCURSAL (por código o nombre)                  -->
     <!-- ====================================================== -->
@@ -113,4 +111,16 @@
         WHERE  codigo LIKE CONCAT('%', #{param}, '%') 
         OR     nombre LIKE CONCAT('%', #{param}, '%')
     </select>
+    
+    <!-- ====================================================== -->
+    <!-- CODIGO DE SUCURSAL REPETIDO O NO                       -->
+    <!-- ====================================================== -->
+    <select id="existe-codigo"
+            parameterType="string"
+            resultType="int">
+        SELECT COUNT(*)  
+        FROM Sucursal  
+        WHERE codigo = #{codigo} 
+    </select>
+
 </mapper>

@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/CatalogoMapper.xml</file>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/ws/PaqueteWS.java</file>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/dto/RSEnvioTabla.java</file>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/PaqueteMapper.xml</file>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/ConductorUnidadMapper.xml</file>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/dominio/PaqueteImp.java</file>
-            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/EnvioMapper.xml</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/ws/UnidadWS.java</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/dominio/UnidadImp.java</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/utilidades/Mensajes.java</file>
+            <file>file:/C:/Users/benit/INTEGRACION/APIPacketWorld/src/java/modelo/mybatis/mapper/UnidadMapper.xml</file>
         </group>
     </open-files>
 </project-private>

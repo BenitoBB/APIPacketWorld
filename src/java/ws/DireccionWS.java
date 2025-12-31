@@ -26,7 +26,7 @@ public class DireccionWS {
     @POST
     @Path("insertar")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public RSDireccion insertar(Direccion direccion) {
 
         if (direccion == null) {
@@ -40,7 +40,7 @@ public class DireccionWS {
     @PUT
     @Path("actualizar")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Respuesta actualizar(Direccion direccion) {
 
         if (direccion == null || direccion.getIdDireccion() == null) {
@@ -53,7 +53,7 @@ public class DireccionWS {
     // Obtener Direccion por ID
     @GET
     @Path("obtener/{idDireccion}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public RSDireccion obtenerPorId(@PathParam("idDireccion") Integer idDireccion) {
 
         if (idDireccion == null) {
@@ -66,7 +66,7 @@ public class DireccionWS {
     // Buscar Direccion por texto
     @GET
     @Path("buscar/{param}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public List<Direccion> buscar(@PathParam("param") String param) {
 
         if (param == null || param.trim().isEmpty()) {
