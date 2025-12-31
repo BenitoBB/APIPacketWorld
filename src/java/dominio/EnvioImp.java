@@ -2,6 +2,7 @@ package dominio;
 
 import dto.RSActualizarEstatus;
 import dto.RSEnvio;
+import dto.RSCostoEnvio;
 import dto.RSEnvioDetalle;
 import dto.RSEnvioLista;
 import dto.RSEnvioTabla;
@@ -14,6 +15,7 @@ import org.apache.ibatis.session.SqlSession;
 import pojo.EstatusEnvioHistorial;
 import pojo.Paquete;
 import utilidades.Mensajes;
+import java.math.BigDecimal;
 
 /**
  *
@@ -40,6 +42,7 @@ public class EnvioImp {
     }
 
     public static RSEnvioDetalle obtenerDetalleEnvio(String numeroGuia) {
+        recalcularCostoEnvio(numeroGuia);
         RSEnvioDetalle detalle = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
 
@@ -197,8 +200,8 @@ public class EnvioImp {
         }
 
         try {
+            // Insertar dirección
             conexionBD.insert("envio.insertar-direccion", envio);
-            System.out.println("ID DIRECCIÓN GENERADO: " + envio.getIdDireccion());
 
             if (envio.getIdDireccion() == null) {
                 conexionBD.rollback();
@@ -206,8 +209,10 @@ public class EnvioImp {
                 return respuesta;
             }
 
+            // Registrar envío con costo inicial 0
+            envio.setCosto(BigDecimal.ZERO);
             conexionBD.insert("envio.registrar-envio", envio);
-
+            recalcularCostoEnvio(envio.getNumeroGuia());
             conexionBD.commit();
             respuesta.setError(false);
             respuesta.setMensaje(Mensajes.ENVIO_REGISTRADO);
@@ -342,6 +347,98 @@ public class EnvioImp {
             }
         }
         return historial;
+    }
+
+    public static Respuesta recalcularCostoEnvio(String numeroGuia) {
+
+        Respuesta r = new Respuesta();
+        r.setError(true);
+
+        SqlSession conexion = MyBatisUtil.getSession();
+        if (conexion == null) {
+            r.setMensaje(Mensajes.SIN_CONEXION);
+            return r;
+        }
+
+        try {
+
+            Integer idEnvio = conexion.selectOne(
+                    "envio.obtener-idEnvio-por-guia",
+                    numeroGuia
+            );
+
+            if (idEnvio == null) {
+                r.setMensaje("Envío no encontrado");
+
+                return r;
+            }
+
+            String cpOrigen = conexion.selectOne(
+                    "envio.obtener-cp-sucursal-origen",
+                    numeroGuia
+            );
+
+            String cpDestino = conexion.selectOne(
+                    "envio.obtener-cp-destino",
+                    numeroGuia
+            );
+
+            if (cpOrigen == null || cpDestino == null) {
+                r.setMensaje("No se pudieron obtener los códigos postales");
+                return r;
+            }
+
+            Integer paquetes = conexion.selectOne(
+                    "envio.contar-paquetes-por-envio",
+                    numeroGuia
+            );
+
+            if (paquetes == null || paquetes <= 0) {
+                paquetes = 1;
+            }
+
+            RSCostoEnvio costo = CostoEnvioImp.calcularCosto(
+                    cpOrigen,
+                    cpDestino,
+                    paquetes
+            );
+
+            if (costo.isError()) {
+                r.setMensaje(costo.getMensaje());
+
+                return r;
+            }
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("idEnvio", idEnvio);
+            params.put("costo", costo.getCostoTotal());
+
+            int filas = conexion.update(
+                    "envio.actualizar-costo-envio",
+                    params
+            );
+
+            if (filas <= 0) {
+                conexion.rollback();
+                r.setMensaje("No se actualizó el costo");
+                return r;
+            }
+
+            conexion.commit();
+
+            r.setError(false);
+            r.setMensaje("Costo recalculado correctamente");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            conexion.rollback();
+            r.setMensaje(Mensajes.ERROR_DESCONOCIDO + e.getMessage());
+        } finally {
+            conexion.close();
+
+        }
+
+        return r;
     }
 
 }

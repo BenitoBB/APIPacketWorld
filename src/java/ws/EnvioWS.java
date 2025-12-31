@@ -143,8 +143,7 @@ public class EnvioWS {
                 || envio.getEstado() == null
                 // DESTINATARIO
                 || envio.getNombreDestinatario() == null
-                || envio.getApellidoPaternoDestinatario() == null
-                || envio.getCosto() == null) {
+                || envio.getApellidoPaternoDestinatario() == null) {
             throw new BadRequestException(Mensajes.ENVIO_DATOS_INCOMPLETOS);
         }
 
@@ -180,5 +179,16 @@ public class EnvioWS {
 
         return EnvioImp.obtenerHistorialEnvio(idEnvio);
     }
+
+
+        @POST
+        @Path("recalcular-costo/{numeroGuia}")
+        @Produces(MediaType.APPLICATION_JSON)
+        public Respuesta recalcularCosto(@PathParam("numeroGuia") String numeroGuia) {
+
+
+            return EnvioImp.recalcularCostoEnvio(numeroGuia);
+        }
+    
 
 }

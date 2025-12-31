@@ -250,6 +250,41 @@
         ORDER BY h.fechaHora DESC
 
     </select>
+    <select id="obtener-cp-sucursal-origen"
+            parameterType="string"
+            resultType="string">
+        SELECT d.codigoPostal
+        FROM Envio e
+        JOIN Sucursal s ON e.idSucursalOrigen = s.idSucursal
+        JOIN Direccion d ON s.idDireccion = d.idDireccion
+        WHERE e.numeroGuia = #{numeroGuia}
+    </select>
+    <select id="obtener-cp-destino"
+            parameterType="string"
+            resultType="string">
+        SELECT d.codigoPostal
+        FROM Envio e
+        JOIN Direccion d ON e.idDireccionDestino = d.idDireccion
+        WHERE e.numeroGuia = #{numeroGuia}
+    </select>
+
+    <select id="contar-paquetes-por-envio"
+            parameterType="string"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM Paquete p
+        JOIN Envio e ON e.idEnvio = p.idEnvio
+        WHERE e.numeroGuia = #{numeroGuia}
+    </select>
+
+    <update id="actualizar-costo-envio" parameterType="map">
+        UPDATE Envio
+        SET costo = #{costo}
+        WHERE idEnvio = #{idEnvio}
+    </update>
+
+
+
 </mapper>
 
 
