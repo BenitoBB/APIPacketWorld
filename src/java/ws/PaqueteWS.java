@@ -31,14 +31,13 @@ public class PaqueteWS {
         return PaqueteImp.obtenerTodos();
     }
 
-    // Registrar paquete
     @Path("insertar")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public RSPaquete insertar(Paquete paquete) {
 
-        if (paquete != null && paquete.getIdEnvio() != null) {
+        if (paquete != null) {
             return PaqueteImp.insertar(paquete);
         }
 
@@ -102,6 +101,14 @@ public class PaqueteWS {
         }
 
         throw new BadRequestException("ID de paquete requerido.");
+    }
+// Obtener paquetes disponibles (sin envío)
+
+    @Path("obtener-disponibles")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Paquete> obtenerDisponibles() {
+        return PaqueteImp.obtenerDisponibles();
     }
 
 }

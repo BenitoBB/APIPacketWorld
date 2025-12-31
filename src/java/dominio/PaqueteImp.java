@@ -223,5 +223,22 @@ public class PaqueteImp {
 
         return r;
     }
+// Obtener paquetes disponibles (sin envío)
+
+    public static List<Paquete> obtenerDisponibles() {
+
+        List<Paquete> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("paquete.obtener-disponibles");
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return lista;
+    }
 
 }

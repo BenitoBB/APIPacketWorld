@@ -18,13 +18,14 @@
     <!-- INSERTAR PAQUETE                 -->
     <!-- ================================ -->
     <insert id="insertar-paquete" parameterType="pojo.Paquete">
-        INSERT INTO Paquete ( 
-        descripcion, peso, alto, ancho, profundidad, idEnvio 
-        ) 
-        VALUES ( 
-        #{descripcion}, #{peso}, #{alto}, #{ancho}, #{profundidad}, #{idEnvio} 
+        INSERT INTO Paquete (
+        descripcion, peso, alto, ancho, profundidad
+        )
+        VALUES (
+        #{descripcion}, #{peso}, #{alto}, #{ancho}, #{profundidad}
         )
     </insert>
+
 
     <!-- ================================ -->
     <!-- ACTUALIZAR PAQUETE               -->
@@ -61,19 +62,26 @@
     <!-- ASIGNAR PAQUETE A ENVÍO          -->
     <!-- ================================ -->
     <update id="asignar-envio">
-        UPDATE Paquete
+        UPDATE paquete
         SET idEnvio = #{idEnvio}
         WHERE idPaquete = #{idPaquete}
+        AND idEnvio IS NULL;
+
     </update>
 
     <!-- ================================ -->
     <!-- DESASIGNAR PAQUETE A ENVÍO       -->
     <!-- ================================ -->
     <update id="desasignar-envio">
-        UPDATE Paquete
+        UPDATE paquete
         SET idEnvio = NULL
-        WHERE idPaquete = #{idPaquete}
+        WHERE idPaquete = #{idPaquete};
+
     </update>
 
-   
+    <select id="obtener-disponibles" resultType="pojo.Paquete">
+        SELECT idPaquete, descripcion, peso, alto, ancho, profundidad, idEnvio
+        FROM paquete
+        WHERE idEnvio IS NULL
+    </select>
 </mapper>
