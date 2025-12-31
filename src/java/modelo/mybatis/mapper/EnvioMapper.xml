@@ -284,6 +284,17 @@
     </update>
 
 
+    
+    <!-- ====================================================== -->
+    <!-- VALIDAR RELACION CLIENTE-ENVIO                         -->
+    <!-- ====================================================== -->
+    <select id="contar-envios-por-cliente"
+            parameterType="int"
+            resultType="int">
+        SELECT COUNT(*)  
+        FROM Envio  
+        WHERE idClienteRemitente = #{idCliente}
+    </select>
 
 </mapper>
 

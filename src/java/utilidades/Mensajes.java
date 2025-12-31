@@ -20,7 +20,10 @@ public class Mensajes {
     public static final String CLIENTE_ERROR_REGISTRAR = "Error al registrar cliente: ";
     public static final String CLIENTE_ERROR_ACTUALIZAR = "Error al actualizar cliente: ";
     public static final String CLIENTE_ERROR_ELIMINAR = "Error al eliminar cliente: ";
-
+    
+    public static final String CLIENTE_CORREO_DUPLICADO = "El correo ya está registrado.";
+    public static final String CLIENTE_TELEFONO_DUPLICADO = "El teléfono ya está registrado.";
+    
     // COLABORADOR
     public static final String COLABORADOR_LOGUEADO = "Autenticación correcta. Bienvenid@ ";
     public static final String COLABORADOR_REGISTRADO = "Colaborador registrado correctamente.";
@@ -33,6 +36,11 @@ public class Mensajes {
     public static final String COLABORADOR_ERROR_CREDENCIALES = "Usuario o contraseña incorrectos.";
     public static final String COLABORADOR_PERFIL_ACTUALIZADO = "Perfil actualizado.";
     public static final String COLABORADOR_PERFIL_NO_ACTUALIZADO = "No se pudo actualizar el perfi.";
+
+    public static final String COLABORADOR_DUP_NO_PERSONAL = "El número de personal ya está registrado.";
+    public static final String COLABORADOR_DUP_CURP = "La CURP ya está registrada.";
+    public static final String COLABORADOR_DUP_CORREO = "El correo ya está registrado.";
+    public static final String COLABORADOR_DUP_NUM_LICENCIA= "El número de licencia ya está registrado.";
 
     // DIRECCION 
     public static final String DIRECCION_REGISTRADA = "Dirección registrada correctamente.";
@@ -65,6 +73,8 @@ public class Mensajes {
     public static final String UNIDAD_NO_EXISTE = "No existe la unidad solicitada.";
     public static final String UNIDAD_OCUPADA = "La unidad ya está asignada a otro conductor.";
     public static final String UNIDAD_ERROR = "Error en operación de unidad: ";
+
+    public static final String UNIDAD_DUP_VIN = "El VIN ingresado ya está registrado en el sistema.";
 
     // CONDUCTOR-UNIDAD 
     public static final String ASIGNACION_REALIZADA = "Unidad asignada correctamente al conductor.";

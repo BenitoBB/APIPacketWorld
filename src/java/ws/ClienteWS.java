@@ -26,7 +26,7 @@ public class ClienteWS {
     // Obtener todos
     @GET
     @Path("obtener-todos")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public List<Cliente> obtenerTodos() {
         return ClienteImp.obtenerTodos();
     }
@@ -35,7 +35,7 @@ public class ClienteWS {
     @POST
     @Path("insertar")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public RSCliente insertarCliente(Cliente cliente) {
         if (cliente != null) {
             return ClienteImp.insertar(cliente);
@@ -47,7 +47,7 @@ public class ClienteWS {
     @PUT
     @Path("actualizar")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Respuesta actualizarCliente(Cliente cliente) {
         if (cliente != null && cliente.getIdCliente() != null) {
             return ClienteImp.actualizar(cliente);
@@ -58,7 +58,7 @@ public class ClienteWS {
     // Eliminar
     @DELETE
     @Path("eliminar/{idCliente}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Respuesta eliminarCliente(@PathParam("idCliente") Integer idCliente) {
         if (idCliente != null) {
             return ClienteImp.eliminar(idCliente);
@@ -69,7 +69,7 @@ public class ClienteWS {
     // Buscar por Nombre
     @GET
     @Path("buscar/nombre/{param}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public List<Cliente> buscarPorNombre(@PathParam("param") String param) {
         return ClienteImp.buscarPorNombre(param);
     }
@@ -77,7 +77,7 @@ public class ClienteWS {
     // Buscar por Telefono
     @GET
     @Path("buscar/telefono/{param}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public List<Cliente> buscarPorTelefono(@PathParam("param") String param) {
         return ClienteImp.buscarPorTelefono(param);
     }
@@ -85,7 +85,7 @@ public class ClienteWS {
     // Buscar por Correo
     @GET
     @Path("buscar/correo/{param}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public List<Cliente> buscarPorCorreo(@PathParam("param") String param) {
         return ClienteImp.buscarPorCorreo(param);
     }

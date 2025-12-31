@@ -201,4 +201,59 @@
         WHERE idColaborador = #{idColaborador} 
     </select>
 
+    <!-- ============================= -->
+    <!-- VALIDAR NO PERSONAL EXISTE   -->
+    <!-- ============================= -->
+    <select id="existe-noPersonal"
+            parameterType="string"
+            resultType="int">
+        SELECT COUNT(*)  
+        FROM Colaborador 
+        WHERE noPersonal = #{noPersonal} 
+    </select>
+    
+    <!-- ============================= -->
+    <!-- VALIDAR CAMPO UNIQUE EXISTE  -->
+    <!-- ============================= -->
+    <select id="existe-campo"
+            parameterType="map"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM Colaborador 
+        WHERE 
+        <choose>
+            <when test="campo == 'curp'">
+                curp = #{valor}
+            </when>
+            <when test="campo == 'correo'">
+                correo = #{valor}
+            </when>
+        </choose>
+    </select>
+    
+    <!-- ========================================= -->
+    <!-- VALIDAR UNIQUE EN UPDATE (EXCLUYENDO ID) -->
+    <!-- ========================================= -->
+    <select id="existe-campo-excluyendo-id"
+            parameterType="map"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM Colaborador 
+        WHERE 
+        <choose>
+            <when test="campo == 'curp'">
+                curp = #{valor} 
+            </when>
+            <when test="campo == 'correo'">
+                correo = #{valor} 
+            </when>
+            <when test="campo == 'numeroLicencia'">
+                numeroLicencia = #{valor} 
+            </when>
+        </choose>
+        AND idColaborador != #{idColaborador}
+    </select>
+
+
+
 </mapper>

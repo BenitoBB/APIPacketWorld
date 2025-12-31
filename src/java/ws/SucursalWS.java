@@ -25,7 +25,7 @@ public class SucursalWS {
     // Obtener todas
     @GET
     @Path("obtener-todas")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public List<Sucursal> obtenerTodas() {
         return SucursalImp.obtenerTodas();
     }
@@ -34,7 +34,7 @@ public class SucursalWS {
     @POST
     @Path("insertar")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public RSSucursal insertarSucursal(Sucursal sucursal) {
 
         if (sucursal == null) {
@@ -48,7 +48,7 @@ public class SucursalWS {
     @PUT
     @Path("actualizar")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Respuesta actualizarSucursal(Sucursal sucursal) {
 
         if (sucursal == null || sucursal.getIdSucursal() == null) {
@@ -61,7 +61,7 @@ public class SucursalWS {
     // Dar de Baja (estatus = Inactiva)
     @PUT
     @Path("baja/{idSucursal}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public Respuesta darDeBaja(@PathParam("idSucursal") Integer idSucursal) {
 
         if (idSucursal == null) {
@@ -74,7 +74,7 @@ public class SucursalWS {
     // Obtener por ID
     @GET
     @Path("obtener/{idSucursal}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public RSSucursal obtenerPorId(@PathParam("idSucursal") Integer idSucursal) {
 
         if (idSucursal == null) {
@@ -87,7 +87,7 @@ public class SucursalWS {
     // Buscar por Nombre o Codigo
     @GET
     @Path("buscar/{param}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public List<Sucursal> buscar(@PathParam("param") String param) {
 
         return SucursalImp.buscar(param);

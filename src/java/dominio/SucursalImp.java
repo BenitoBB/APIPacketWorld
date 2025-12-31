@@ -40,6 +40,14 @@ public class SucursalImp {
 
         if (conexionBD != null) {
             try {
+
+                // VALIDACIÓN DE NEGOCIO
+                if (existeCodigo(sucursal.getCodigo())) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("El código de la sucursal ya está en uso. Intenta con otro.");
+                    return respuesta;
+                }
+                
                 Direccion direccion = sucursal.getDireccion();
                 conexionBD.insert("direccion.insertar", direccion);
 
@@ -191,4 +199,16 @@ public class SucursalImp {
 
         return lista;
     }
+
+    // Validar Código En Existencia 
+    public static boolean existeCodigo(String codigo) {
+        SqlSession sesion = MyBatisUtil.getSession();
+        try {
+            int total = sesion.selectOne("sucursal.existe-codigo", codigo);
+            return total > 0;
+        } finally {
+            sesion.close();
+        }
+    }
+
 }

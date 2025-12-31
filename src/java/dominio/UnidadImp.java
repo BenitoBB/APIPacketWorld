@@ -2,6 +2,7 @@ package dominio;
 
 import dto.RSUnidad;
 import dto.Respuesta;
+import java.util.HashMap;
 import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
@@ -16,7 +17,7 @@ public class UnidadImp {
 
     // Obtener todas las unidades
     public static List<Unidad> obtenerTodas() {
-        List<Unidad> lista = null; 
+        List<Unidad> lista = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
 
         if (conexionBD != null) {
@@ -29,7 +30,7 @@ public class UnidadImp {
             }
         }
 
-        return lista; 
+        return lista;
     }
 
     // Insertar Unidad
@@ -39,6 +40,12 @@ public class UnidadImp {
 
         if (conexionBD != null) {
             try {
+                // VALIDACIÓN UNIQUE VIN
+                if (existeVIN(unidad.getVin())) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.UNIDAD_DUP_VIN);
+                    return respuesta;
+                }
                 int filas = conexionBD.insert("unidad.insertar-unidad", unidad);
                 conexionBD.commit();
 
@@ -71,6 +78,15 @@ public class UnidadImp {
 
         if (conexionBD != null) {
             try {
+                // VALIDACIÓN UNIQUE NII (UPDATE)
+                if (existeVINExcluyendoId(
+                        unidad.getVin(),
+                        unidad.getIdUnidad()
+                )) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.UNIDAD_DUP_VIN);
+                    return respuesta;
+                }
                 int filas = conexionBD.update("unidad.actualizar-unidad", unidad);
                 conexionBD.commit();
 
@@ -184,6 +200,50 @@ public class UnidadImp {
         }
 
         return unidad;
+    }
+
+    // Validar VIN existente (INSERT)
+    public static boolean existeVIN(String nii) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean existe = false;
+
+        if (conexionBD != null) {
+            try {
+                Integer conteo = conexionBD.selectOne(
+                        "unidad.existe-vin",
+                        nii
+                );
+                existe = conteo != null && conteo > 0;
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return existe;
+    }
+
+    // Validar VIN existente en otra unidad (UPDATE)
+    public static boolean existeVINExcluyendoId(String vin, int idUnidad) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean existe = false;
+
+        if (conexionBD != null) {
+            try {
+                HashMap<String, Object> parametros = new HashMap<>();
+                parametros.put("vin", vin);
+                parametros.put("idUnidad", idUnidad);
+
+                Integer conteo = conexionBD.selectOne(
+                        "unidad.existe-vin-excluyendo-id",
+                        parametros
+                );
+
+                existe = conteo != null && conteo > 0;
+
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return existe;
     }
 
 }

@@ -2,10 +2,12 @@ package dominio;
 
 import dto.RSCliente;
 import dto.Respuesta;
+import java.util.HashMap;
 import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Cliente;
+import pojo.Direccion;
 import utilidades.Mensajes;
 
 /**
@@ -39,6 +41,18 @@ public class ClienteImp {
 
         if (conexionBD != null) {
             try {
+                // VALIDACIÓN UNIQUE CORREO
+                if (existeCorreo(cliente.getCorreo())) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.CLIENTE_CORREO_DUPLICADO);
+                    return respuesta;
+                }
+                // VALIDACIÓN UNIQUE TELEFONO
+                if (existeTelefono(cliente.getTelefono())) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.CLIENTE_TELEFONO_DUPLICADO);
+                    return respuesta;
+                }
                 int filas = conexionBD.insert("cliente.insertar-cliente", cliente);
                 conexionBD.commit();
 
@@ -73,11 +87,54 @@ public class ClienteImp {
 
         if (conexionBD != null) {
             try {
+                // VALIDACIÓN UNIQUE CORREO (UPDATE)
+                if (existeCorreoExcluyendoId(
+                        cliente.getCorreo(),
+                        cliente.getIdCliente()
+                )) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.CLIENTE_CORREO_DUPLICADO);
+                    return respuesta;
+                }
+                // VALIDACIÓN UNIQUE TELEFONO (UPDATE)
+                if (existeTelefonoExcluyendoId(
+                        cliente.getTelefono(),
+                        cliente.getIdCliente()
+                )) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.CLIENTE_TELEFONO_DUPLICADO);
+                    return respuesta;
+                }
 
-                int filas = conexionBD.update("cliente.actualizar-cliente", cliente);
-                conexionBD.commit();
+                // OBTENER DIRECCIÓN ACTUAL
+                Direccion direccionActual = conexionBD.selectOne(
+                        "direccion.obtener-por-id",
+                        cliente.getDireccion().getIdDireccion()
+                );
 
-                if (filas > 0) {
+                // VALIDAR CAMBIOS EN DIRECCIÓN
+                boolean cambiosDireccion = huboCambiosDireccion(
+                        cliente.getDireccion(),
+                        direccionActual
+                );
+                // ACTUALIZAR DIRECCIÓN SOLO SI CAMBIÓ
+                if (cambiosDireccion) {
+                    int filasDireccion = conexionBD.update("direccion.actualizar", cliente.getDireccion());
+
+                    if (filasDireccion == 0) {
+                        conexionBD.rollback();
+                        respuesta.setError(true);
+                        respuesta.setMensaje(Mensajes.DIRECCION_NO_ACTUALIZADA);
+                        return respuesta;
+                    }
+                }
+                // ASIGNAR FK
+                cliente.setIdDireccion(cliente.getDireccion().getIdDireccion());
+
+                // ACTUALIZAR CLIENTE
+                int filasCliente = conexionBD.update("cliente.actualizar-cliente", cliente);
+                if (filasCliente > 0) {
+                    conexionBD.commit();
                     respuesta.setError(false);
                     respuesta.setMensaje(Mensajes.CLIENTE_ACTUALIZADO);
                 } else {
@@ -108,6 +165,15 @@ public class ClienteImp {
         if (conexionBD != null) {
 
             try {
+                // VALIDAR RELACIONES
+                if (EnvioImp.clienteTieneEnvios(idCliente)) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(
+                            "No se puede eliminar el cliente porque tiene envíos asociados.\n"
+                            + "Elimine primero los envíos o reasigne el cliente."
+                    );
+                    return respuesta;
+                }
                 int filas = conexionBD.delete("cliente.eliminar-cliente", idCliente);
                 conexionBD.commit();
 
@@ -187,4 +253,109 @@ public class ClienteImp {
 
         return lista;
     }
+
+    public static boolean existeCorreo(String correo) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean existe = false;
+
+        if (conexionBD != null) {
+            try {
+                Integer count = conexionBD.selectOne(
+                        "cliente.existe-correo",
+                        correo
+                );
+                existe = count != null && count > 0;
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return existe;
+    }
+
+    public static boolean existeCorreoExcluyendoId(String correo, int idCliente) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean existe = false;
+
+        if (conexionBD != null) {
+            try {
+                HashMap<String, Object> params = new HashMap<>();
+                params.put("correo", correo);
+                params.put("idCliente", idCliente);
+
+                Integer count = conexionBD.selectOne(
+                        "cliente.existe-correo-excluyendo-id",
+                        params
+                );
+
+                existe = count != null && count > 0;
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return existe;
+    }
+
+    public static boolean existeTelefono(String telefono) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean existe = false;
+
+        if (conexionBD != null) {
+            try {
+                Integer count = conexionBD.selectOne(
+                        "cliente.existe-telefono",
+                        telefono
+                );
+                existe = count != null && count > 0;
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return existe;
+    }
+
+    public static boolean existeTelefonoExcluyendoId(String telefono, int idCliente) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean existe = false;
+
+        if (conexionBD != null) {
+            try {
+                HashMap<String, Object> params = new HashMap<>();
+                params.put("telefono", telefono);
+                params.put("idCliente", idCliente);
+
+                Integer count = conexionBD.selectOne(
+                        "cliente.existe-telefono-excluyendo-id",
+                        params
+                );
+
+                existe = count != null && count > 0;
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return existe;
+    }
+
+    private static boolean huboCambiosDireccion(
+            Direccion nueva,
+            Direccion actual
+    ) {
+        if (nueva == null || actual == null) {
+            return false;
+        }
+
+        return !String.valueOf(nueva.getCalle())
+                .equals(String.valueOf(actual.getCalle()))
+                || !String.valueOf(nueva.getNumero())
+                        .equals(String.valueOf(actual.getNumero()))
+                || !String.valueOf(nueva.getCodigoPostal())
+                        .equals(String.valueOf(actual.getCodigoPostal()))
+                || !String.valueOf(nueva.getColonia())
+                        .equals(String.valueOf(actual.getColonia()));
+    }
+
 }
