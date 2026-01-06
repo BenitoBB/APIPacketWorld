@@ -46,6 +46,12 @@ public class UnidadImp {
                     respuesta.setMensaje(Mensajes.UNIDAD_DUP_VIN);
                     return respuesta;
                 }
+                if (existeNII(unidad.getNumeroIdentificacionInterno())) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.UNIDAD_DUP_NII);
+                    return respuesta;
+                }
+
                 int filas = conexionBD.insert("unidad.insertar-unidad", unidad);
                 conexionBD.commit();
 
@@ -120,6 +126,14 @@ public class UnidadImp {
 
         if (conexionBD != null) {
             try {
+                if (ConductorUnidadImp.unidadTieneConductorActivo(idUnidad)) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(
+                            "No se puede dar de baja la unidad porque tiene un conductor asignado. "
+                            + "Desasígnalo primero."
+                    );
+                    return respuesta;
+                }
 
                 Unidad unidad = new Unidad();
                 unidad.setIdUnidad(idUnidad);
@@ -246,4 +260,13 @@ public class UnidadImp {
         return existe;
     }
 
+    public static boolean existeNII(String nii) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        try {
+            Integer conteo = conexionBD.selectOne("unidad.existe-nii", nii);
+            return conteo != null && conteo > 0;
+        } finally {
+            conexionBD.close();
+        }
+    }
 }

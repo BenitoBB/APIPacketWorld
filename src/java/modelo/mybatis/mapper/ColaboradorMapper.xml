@@ -220,7 +220,7 @@
             resultType="int">
         SELECT COUNT(*) 
         FROM Colaborador 
-        WHERE 
+        WHERE
         <choose>
             <when test="campo == 'curp'">
                 curp = #{valor}
@@ -228,8 +228,15 @@
             <when test="campo == 'correo'">
                 correo = #{valor}
             </when>
+            <when test="campo == 'numeroLicencia'">
+                numeroLicencia = #{valor}
+            </when>
+            <otherwise>
+                1 = 0
+            </otherwise>
         </choose>
     </select>
+
     
     <!-- ========================================= -->
     <!-- VALIDAR UNIQUE EN UPDATE (EXCLUYENDO ID) -->
@@ -239,20 +246,24 @@
             resultType="int">
         SELECT COUNT(*) 
         FROM Colaborador 
-        WHERE 
+        WHERE
         <choose>
             <when test="campo == 'curp'">
-                curp = #{valor} 
+                curp = #{valor}
             </when>
             <when test="campo == 'correo'">
-                correo = #{valor} 
+                correo = #{valor}
             </when>
             <when test="campo == 'numeroLicencia'">
-                numeroLicencia = #{valor} 
-            </when>
+                numeroLicencia = #{valor}
+            </when> 
+            <otherwise>
+                1 = 0 
+            </otherwise>
         </choose>
         AND idColaborador != #{idColaborador}
     </select>
+
 
 
 

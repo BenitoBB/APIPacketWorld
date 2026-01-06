@@ -180,15 +180,18 @@ public class EnvioWS {
         return EnvioImp.obtenerHistorialEnvio(idEnvio);
     }
 
+    @POST
+    @Path("recalcular-costo/{numeroGuia}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta recalcularCosto(@PathParam("numeroGuia") String numeroGuia) {
 
-        @POST
-        @Path("recalcular-costo/{numeroGuia}")
-        @Produces(MediaType.APPLICATION_JSON)
-        public Respuesta recalcularCosto(@PathParam("numeroGuia") String numeroGuia) {
+        Integer idEnvio = EnvioImp.obtenerIdEnvioPorGuia(numeroGuia);
 
-
-            return EnvioImp.recalcularCostoEnvio(numeroGuia);
+        if (idEnvio == null) {
+            throw new BadRequestException("Envío no encontrado");
         }
-    
+
+        return EnvioImp.recalcularCostoEnvio(idEnvio);
+    }
 
 }

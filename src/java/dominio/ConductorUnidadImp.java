@@ -224,4 +224,23 @@ public class ConductorUnidadImp {
         return respuesta;
     }
 
+    public static boolean unidadTieneConductorActivo(int idUnidad) {
+
+        SqlSession conexion = MyBatisUtil.getSession();
+
+        if (conexion != null) {
+            try {
+                Integer total = conexion.selectOne(
+                        "conductorUnidad.existe-conductor-activo",
+                        idUnidad
+                );
+                return total != null && total > 0;
+            } finally {
+                conexion.close();
+            }
+        }
+
+        return false;
+    }
+
 }

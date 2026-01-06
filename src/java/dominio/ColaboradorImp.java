@@ -83,24 +83,29 @@ public class ColaboradorImp {
                 // VALIDACIÓN DE NEGOCIO
                 if (existeNoPersonal(colaborador.getNoPersonal())) {
                     respuesta.setError(true);
-                    respuesta.setMensaje("El número de personal ya está registrado.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_DUP_NO_PERSONAL);
                     return respuesta;
                 }
+
                 if (existeCampo("curp", colaborador.getCurp())) {
                     respuesta.setError(true);
                     respuesta.setMensaje(Mensajes.COLABORADOR_DUP_CURP);
                     return respuesta;
                 }
-                if (existeCampo("correo", colaborador.getCurp())) {
+
+                if (existeCampo("correo", colaborador.getCorreo())) {
                     respuesta.setError(true);
                     respuesta.setMensaje(Mensajes.COLABORADOR_DUP_CORREO);
                     return respuesta;
                 }
-                if (existeCampo("numeroLicencia", colaborador.getCurp())) {
+
+                if (colaborador.getNumeroLicencia() != null
+                        && existeCampo("numeroLicencia", colaborador.getNumeroLicencia())) {
                     respuesta.setError(true);
                     respuesta.setMensaje(Mensajes.COLABORADOR_DUP_NUM_LICENCIA);
                     return respuesta;
                 }
+
                 int filas = conexionBD.insert("colaborador.insertar-colaborador", colaborador);
                 conexionBD.commit();
 
@@ -127,7 +132,7 @@ public class ColaboradorImp {
                 } else if (msg.contains("numeroLicencia")) {
                     respuesta.setMensaje(Mensajes.COLABORADOR_DUP_NUM_LICENCIA);
                 } else {
-                    respuesta.setMensaje(Mensajes.COLABORADOR_ERROR);
+                    respuesta.setMensaje(Mensajes.COLABORADOR_ERROR + ex.getMessage());
                 }
             } finally {
                 conexionBD.close();

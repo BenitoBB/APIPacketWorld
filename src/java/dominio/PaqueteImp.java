@@ -120,29 +120,33 @@ public class PaqueteImp {
     public static Respuesta eliminar(Integer idPaquete) {
 
         Respuesta respuesta = new Respuesta();
-        SqlSession conexionBD = MyBatisUtil.getSession();
+        SqlSession sesion = MyBatisUtil.getSession();
 
-        if (conexionBD != null) {
+        if (sesion != null) {
             try {
-                int filas = conexionBD.delete("paquete.eliminar-paquete", idPaquete);
-                conexionBD.commit();
+                Integer idEnvio = sesion.selectOne(
+                        "paquete.obtener-id-envio-por-paquete",
+                        idPaquete
+                );
 
-                if (filas > 0) {
-                    respuesta.setError(false);
-                    respuesta.setMensaje("Paquete eliminado correctamente.");
-                } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo eliminar el paquete.");
+                int filas = sesion.delete("paquete.eliminar-paquete", idPaquete);
+
+                if (filas > 0 && idEnvio != null) {
+                    sesion.update("envio.recalcular-costo", idEnvio);
                 }
-            } catch (Exception ex) {
+
+                sesion.commit();
+
+                respuesta.setError(false);
+                respuesta.setMensaje("Paquete eliminado correctamente.");
+
+            } catch (Exception e) {
+                sesion.rollback();
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al eliminar paquete: " + ex.getMessage());
+                respuesta.setMensaje("Error al eliminar paquete: " + e.getMessage());
             } finally {
-                conexionBD.close();
+                sesion.close();
             }
-        } else {
-            respuesta.setError(true);
-            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
 
         return respuesta;
@@ -160,13 +164,12 @@ public class PaqueteImp {
                 params.put("idPaquete", idPaquete);
                 params.put("idEnvio", idEnvio);
 
-                int filas = sesion.update(
-                        "paquete.asignar-envio",
-                        params
-                );
-                sesion.commit();
+                int filas = sesion.update("paquete.asignar-envio", params);
 
                 if (filas > 0) {
+                    sesion.update("envio.recalcular-costo", idEnvio);
+                    sesion.commit();
+
                     r.setError(false);
                     r.setMensaje("Paquete asignado al envío correctamente.");
                 } else {
@@ -175,6 +178,7 @@ public class PaqueteImp {
                 }
 
             } catch (Exception e) {
+                sesion.rollback();
                 r.setError(true);
                 r.setMensaje("Error al asignar paquete: " + e.getMessage());
             } finally {
@@ -196,10 +200,19 @@ public class PaqueteImp {
 
         if (sesion != null) {
             try {
+                Integer idEnvio = sesion.selectOne(
+                        "paquete.obtener-id-envio-por-paquete",
+                        idPaquete
+                );
+
                 int filas = sesion.update(
                         "paquete.desasignar-envio",
                         idPaquete
                 );
+                if (idEnvio != null) {
+                    sesion.update("envio.recalcular-costo", idEnvio);
+                }
+
                 sesion.commit();
 
                 if (filas > 0) {
@@ -223,8 +236,8 @@ public class PaqueteImp {
 
         return r;
     }
-// Obtener paquetes disponibles (sin envío)
 
+    // Obtener paquetes disponibles (sin envío)
     public static List<Paquete> obtenerDisponibles() {
 
         List<Paquete> lista = null;
@@ -233,6 +246,26 @@ public class PaqueteImp {
         if (conexionBD != null) {
             try {
                 lista = conexionBD.selectList("paquete.obtener-disponibles");
+            } finally {
+                conexionBD.close();
+            }
+        }
+
+        return lista;
+    }
+
+    // Obtener Paquetes asociados a Numero Guia
+    public static List<Paquete> obtenerPorGuia(String guia) {
+
+        List<Paquete> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList(
+                        "paquete.obtener-por-guia",
+                        guia
+                );
             } finally {
                 conexionBD.close();
             }

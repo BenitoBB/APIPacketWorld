@@ -100,5 +100,16 @@
         WHERE vin = #{vin} 
         AND idUnidad != #{idUnidad}
     </select>
+    
+    <!-- ===================================== -->
+    <!-- VALIDAR NII EXISTENTE (INSERT)        -->
+    <!-- ===================================== -->
+    <select id="existe-nii"
+            parameterType="string"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM Unidad 
+        WHERE numeroIdentificacionInterno = #{nii} 
+    </select>
 
 </mapper>

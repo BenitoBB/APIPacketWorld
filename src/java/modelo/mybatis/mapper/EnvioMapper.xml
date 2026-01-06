@@ -276,15 +276,23 @@
         JOIN Envio e ON e.idEnvio = p.idEnvio
         WHERE e.numeroGuia = #{numeroGuia}
     </select>
-
-    <update id="actualizar-costo-envio" parameterType="map">
-        UPDATE Envio
-        SET costo = #{costo}
-        WHERE idEnvio = #{idEnvio}
+    
+    <!-- ================================ -->
+    <!-- RECALCULAR COSTO DEL ENVÍO       -->
+    <!-- ================================ -->
+    <update id="recalcular-costo" parameterType="int">
+        UPDATE Envio 
+        SET costo = 
+        ( 
+        SELECT IFNULL(SUM( 
+        (p.peso * 10) + (p.alto * p.ancho * p.profundidad * 0.01) 
+        ), 0) 
+        FROM Paquete p 
+        WHERE p.idEnvio = #{value} 
+        ) 
+        WHERE idEnvio = #{value} 
     </update>
 
-
-    
     <!-- ====================================================== -->
     <!-- VALIDAR RELACION CLIENTE-ENVIO                         -->
     <!-- ====================================================== -->
@@ -295,6 +303,29 @@
         FROM Envio  
         WHERE idClienteRemitente = #{idCliente}
     </select>
+    
+    <!-- ================================ -->
+    <!-- OBTENER CP ORIGEN Y DESTINO      -->
+    <!-- ================================ -->
+    <select id="obtener-cps" parameterType="int" resultType="map">
+        SELECT 
+        so.codigoPostal AS cpOrigen, 
+        dd.codigoPostal AS cpDestino 
+        FROM Envio e 
+        JOIN Sucursal s ON e.idSucursalOrigen = s.idSucursal 
+        JOIN Direccion so ON s.idDireccion = so.idDireccion 
+        JOIN Direccion dd ON e.idDireccionDestino = dd.idDireccion 
+        WHERE e.idEnvio = #{idEnvio}  
+    </select>
+
+    <!-- ================================ -->
+    <!-- ACTUALIZAR COSTO DE UN EVNIO     -->
+    <!-- ================================ -->
+    <update id="actualizar-costo" parameterType="map">
+        UPDATE Envio 
+        SET costo = #{costo} 
+        WHERE idEnvio = #{idEnvio} 
+    </update>
 
 </mapper>
 

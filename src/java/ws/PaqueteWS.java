@@ -31,6 +31,7 @@ public class PaqueteWS {
         return PaqueteImp.obtenerTodos();
     }
 
+    // Registrar paquete
     @Path("insertar")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -102,8 +103,8 @@ public class PaqueteWS {
 
         throw new BadRequestException("ID de paquete requerido.");
     }
-// Obtener paquetes disponibles (sin envío)
 
+    // Obtener paquetes disponibles (sin envío)
     @Path("obtener-disponibles")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -111,4 +112,17 @@ public class PaqueteWS {
         return PaqueteImp.obtenerDisponibles();
     }
 
+    // Buscar paquetes por número de guía
+    @Path("buscar-por-guia/{guia}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Paquete> buscarPorGuia(
+            @PathParam("guia") String guia) {
+
+        if (guia != null && !guia.trim().isEmpty()) {
+            return PaqueteImp.obtenerPorGuia(guia);
+        }
+
+        throw new BadRequestException("Número de guía requerido.");
+    }
 }

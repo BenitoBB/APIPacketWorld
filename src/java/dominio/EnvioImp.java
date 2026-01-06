@@ -16,10 +16,11 @@ import pojo.EstatusEnvioHistorial;
 import pojo.Paquete;
 import utilidades.Mensajes;
 import java.math.BigDecimal;
+import utilidades.Validaciones;
 
 /**
  *
- * @author ohana & benito
+ * @author Ohana & Benito
  */
 public class EnvioImp {
 
@@ -42,7 +43,6 @@ public class EnvioImp {
     }
 
     public static RSEnvioDetalle obtenerDetalleEnvio(String numeroGuia) {
-        recalcularCostoEnvio(numeroGuia);
         RSEnvioDetalle detalle = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
 
@@ -212,7 +212,6 @@ public class EnvioImp {
             // Registrar envío con costo inicial 0
             envio.setCosto(BigDecimal.ZERO);
             conexionBD.insert("envio.registrar-envio", envio);
-            recalcularCostoEnvio(envio.getNumeroGuia());
             conexionBD.commit();
             respuesta.setError(false);
             respuesta.setMensaje(Mensajes.ENVIO_REGISTRADO);
@@ -349,97 +348,6 @@ public class EnvioImp {
         return historial;
     }
 
-    public static Respuesta recalcularCostoEnvio(String numeroGuia) {
-
-        Respuesta r = new Respuesta();
-        r.setError(true);
-
-        SqlSession conexion = MyBatisUtil.getSession();
-        if (conexion == null) {
-            r.setMensaje(Mensajes.SIN_CONEXION);
-            return r;
-        }
-
-        try {
-
-            Integer idEnvio = conexion.selectOne(
-                    "envio.obtener-idEnvio-por-guia",
-                    numeroGuia
-            );
-
-            if (idEnvio == null) {
-                r.setMensaje("Envío no encontrado");
-
-                return r;
-            }
-
-            String cpOrigen = conexion.selectOne(
-                    "envio.obtener-cp-sucursal-origen",
-                    numeroGuia
-            );
-
-            String cpDestino = conexion.selectOne(
-                    "envio.obtener-cp-destino",
-                    numeroGuia
-            );
-
-            if (cpOrigen == null || cpDestino == null) {
-                r.setMensaje("No se pudieron obtener los códigos postales");
-                return r;
-            }
-
-            Integer paquetes = conexion.selectOne(
-                    "envio.contar-paquetes-por-envio",
-                    numeroGuia
-            );
-
-            if (paquetes == null || paquetes <= 0) {
-                paquetes = 1;
-            }
-
-            RSCostoEnvio costo = CostoEnvioImp.calcularCosto(
-                    cpOrigen,
-                    cpDestino,
-                    paquetes
-            );
-
-            if (costo.isError()) {
-                r.setMensaje(costo.getMensaje());
-
-                return r;
-            }
-
-            Map<String, Object> params = new HashMap<>();
-            params.put("idEnvio", idEnvio);
-            params.put("costo", costo.getCostoTotal());
-
-            int filas = conexion.update(
-                    "envio.actualizar-costo-envio",
-                    params
-            );
-
-            if (filas <= 0) {
-                conexion.rollback();
-                r.setMensaje("No se actualizó el costo");
-                return r;
-            }
-
-            conexion.commit();
-
-            r.setError(false);
-            r.setMensaje("Costo recalculado correctamente");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            conexion.rollback();
-            r.setMensaje(Mensajes.ERROR_DESCONOCIDO + e.getMessage());
-        } finally {
-            conexion.close();
-
-        }
-
-        return r;
-    }
     public static boolean clienteTieneEnvios(int idCliente) {
         SqlSession conexionBD = MyBatisUtil.getSession();
         boolean tiene = false;
@@ -456,6 +364,66 @@ public class EnvioImp {
             }
         }
         return tiene;
+    }
+
+    public static Respuesta recalcularCostoEnvio(int idEnvio) {
+        Respuesta r = new Respuesta();
+        SqlSession session = MyBatisUtil.getSession();
+
+        try {
+            // 1. Obtener CPs
+            HashMap<String, String> cps
+                    = session.selectOne("envio.obtener-cps", idEnvio);
+
+            // 2. Contar paquetes
+            Integer paquetes
+                    = session.selectOne("paquete.contar-por-envio", idEnvio);
+
+            if (paquetes == null || paquetes == 0) {
+                session.update("envio.actualizar-costo",
+                        new HashMap<String, Object>() {
+                    {
+                        put("idEnvio", idEnvio);
+                        put("costo", 0.0);
+                    }
+                });
+                session.commit();
+                r.setError(false);
+                return r;
+            }
+
+            // 3. Distancia
+            double km = DistanciaImp.obtenerDistancia(
+                    cps.get("cpOrigen"),
+                    cps.get("cpDestino")
+            );
+
+            // 4. Cálculo
+            double costo = Validaciones.calcularCostoEnvio(km, paquetes);
+
+            // 5. Actualizar envío
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("idEnvio", idEnvio);
+            params.put("costo", costo);
+
+            session.update("envio.actualizar-costo", params);
+            session.commit();
+
+            r.setError(false);
+        } catch (Exception e) {
+            r.setError(true);
+            r.setMensaje("Error al recalcular costo: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return r;
+    }
+ 
+    public static Integer obtenerIdEnvioPorGuia(String numeroGuia) {
+        try (SqlSession s = MyBatisUtil.getSession()) {
+            return s.selectOne("envio.obtener-idEnvio-por-guia", numeroGuia);
+        }
     }
 
 }

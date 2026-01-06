@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="dashboard">
+
+    <!-- ============================= -->
+    <!-- RESUMEN GENERAL (KPIs)       -->
+    <!-- ============================= -->
+    <select id="obtener-resumen" resultType="pojo.DashboardResumen">
+        SELECT 
+            (SELECT COUNT(*) FROM Envio) AS totalEnvios, 
+            (SELECT COUNT(*) FROM Cliente) AS totalClientes, 
+            (SELECT COUNT(*) FROM Colaborador) AS totalColaboradores, 
+            (SELECT COUNT(*) FROM Envio WHERE idEstatus = 5) AS enviosEntregados, 
+            (SELECT IFNULL(SUM(costo),0) FROM Envio) AS ingresosTotales 
+    </select>
+
+    <!-- ============================= -->
+    <!-- ENVIOS POR ESTATUS            -->
+    <!-- ============================= -->
+    <select id="envios-por-estatus" resultType="pojo.DashboardConteo">
+        SELECT e.nombre AS etiqueta, 
+               COUNT(v.idEnvio) AS total 
+        FROM Envio v 
+        JOIN Estatus e ON v.idEstatus = e.idEstatus 
+        GROUP BY e.nombre 
+    </select>
+
+    <!-- ============================= -->
+    <!-- ENVIOS POR SUCURSAL           -->
+    <!-- ============================= -->
+    <select id="envios-por-sucursal" resultType="pojo.DashboardConteo">
+        SELECT s.nombre AS etiqueta, 
+               COUNT(e.idEnvio) AS total 
+        FROM Envio e 
+        JOIN Sucursal s ON e.idSucursalOrigen = s.idSucursal 
+        GROUP BY s.nombre 
+    </select>
+
+    <!-- ============================= -->
+    <!-- ÚLTIMOS ENVÍOS                -->
+    <!-- ============================= -->
+    <select id="ultimos-envios" resultType="pojo.DashboardEnvio">
+        SELECT numeroGuia, 
+               fechaEnvio, 
+               costo 
+        FROM Envio 
+        ORDER BY fechaEnvio DESC 
+        LIMIT 10 
+    </select>
+
+</mapper>

@@ -136,4 +136,16 @@
         FROM Unidad
         WHERE estatus = 'Activa'
     </select>
+    
+    <!-- ====================================================== -->
+    <!-- EXISTE CONDUCTOR ACTIVO EN UNIDAD                      -->
+    <!-- ====================================================== -->
+    <select id="existe-conductor-activo"
+            parameterType="int"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM ConductorUnidad 
+        WHERE idUnidad = #{idUnidad} 
+        AND activo = 1 
+    </select>
 </mapper>

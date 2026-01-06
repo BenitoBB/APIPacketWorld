@@ -18,11 +18,17 @@
     <!-- INSERTAR PAQUETE                 -->
     <!-- ================================ -->
     <insert id="insertar-paquete" parameterType="pojo.Paquete">
-        INSERT INTO Paquete (
-        descripcion, peso, alto, ancho, profundidad
+        INSERT INTO Paquete ( 
+        descripcion, peso, alto, ancho, profundidad 
+        <if test="idEnvio != null">
+            , idEnvio  
+        </if>
         )
-        VALUES (
-        #{descripcion}, #{peso}, #{alto}, #{ancho}, #{profundidad}
+        VALUES ( 
+        #{descripcion}, #{peso}, #{alto}, #{ancho}, #{profundidad} 
+        <if test="idEnvio != null">
+            , #{idEnvio}  
+        </if>
         )
     </insert>
 
@@ -44,7 +50,7 @@
     <!-- ================================ -->
     <!-- OBTENER PAQUETES POR ENVÍO       -->
     <!-- ================================ -->
-    <select id="obtener-por-envio" parameterType="int" resultType="pojo.Paquete">
+    <select id="obtener-por-envio" parameterType="map" resultType="pojo.Paquete">
         SELECT * 
         FROM Paquete 
         WHERE idEnvio = #{idEnvio} 
@@ -55,33 +61,53 @@
     <!-- ================================ -->
     <delete id="eliminar-paquete" parameterType="int">
         DELETE FROM Paquete 
-        WHERE idPaquete = #{idPaquete} 
+        WHERE idPaquete = #{value} 
     </delete>
 
     <!-- ================================ -->
     <!-- ASIGNAR PAQUETE A ENVÍO          -->
     <!-- ================================ -->
     <update id="asignar-envio">
-        UPDATE paquete
-        SET idEnvio = #{idEnvio}
-        WHERE idPaquete = #{idPaquete}
-        AND idEnvio IS NULL;
-
+        UPDATE Paquete 
+        SET idEnvio = #{idEnvio} 
+        WHERE idPaquete = #{idPaquete} 
     </update>
 
     <!-- ================================ -->
     <!-- DESASIGNAR PAQUETE A ENVÍO       -->
     <!-- ================================ -->
     <update id="desasignar-envio">
-        UPDATE paquete
-        SET idEnvio = NULL
-        WHERE idPaquete = #{idPaquete};
-
+        UPDATE Paquete 
+        SET idEnvio = NULL 
+        WHERE idPaquete = #{idPaquete} 
     </update>
 
-    <select id="obtener-disponibles" resultType="pojo.Paquete">
-        SELECT idPaquete, descripcion, peso, alto, ancho, profundidad, idEnvio
-        FROM paquete
-        WHERE idEnvio IS NULL
+    <!-- ================================ -->
+    <!-- CONTAR PAQUETES A ENVIO          -->
+    <!-- ================================ -->
+    <select id="contar-por-envio" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM Paquete WHERE idEnvio = #{idEnvio} 
     </select>
+    
+    <!-- ================================ -->
+    <!-- OBTENER PAQUETES POR GUIA ENVIO -->
+    <!-- ================================ -->
+    <select id="obtener-por-guia" parameterType="string" resultType="pojo.Paquete">
+        SELECT p.* 
+        FROM Paquete p 
+        INNER JOIN Envio e ON e.idEnvio = p.idEnvio 
+        WHERE e.numeroGuia LIKE CONCAT('%', #{guia}, '%') 
+    </select>
+
+    <!-- ================================ -->
+    <!-- OBTENER ID ENVIO POR PAQUETE     -->
+    <!-- ================================ -->
+    <select id="obtener-id-envio-por-paquete"
+            parameterType="int"
+            resultType="int">
+        SELECT idEnvio 
+        FROM Paquete 
+        WHERE idPaquete = #{value} 
+    </select>
+
 </mapper>
