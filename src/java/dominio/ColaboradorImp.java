@@ -330,23 +330,23 @@ public class ColaboradorImp {
 
                 if (colaboradorEncontrado != null) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Datos de perfil obtenidos correctamente.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_PERFIL_OBTENIDO);
                     respuesta.setColaborador(colaboradorEncontrado);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("Error: Colaborador no encontrado.");
+                    respuesta.setMensaje(Mensajes.COLABORADOR_NO_ENCONTRADO);
                 }
 
             } catch (Exception e) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error interno del servidor al buscar el perfil: " + e.getMessage());
+                respuesta.setMensaje(Mensajes.COLABORADOR_ERROR_BUSCAR + e.getMessage());
                 e.printStackTrace();
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("Error: No se pudo establecer la conexión con la base de datos.");
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
         }
         return respuesta;
     }

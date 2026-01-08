@@ -168,10 +168,7 @@ public class ClienteImp {
                 // VALIDAR RELACIONES
                 if (EnvioImp.clienteTieneEnvios(idCliente)) {
                     respuesta.setError(true);
-                    respuesta.setMensaje(
-                            "No se puede eliminar el cliente porque tiene envíos asociados.\n"
-                            + "Elimine primero los envíos o reasigne el cliente."
-                    );
+                    respuesta.setMensaje(Mensajes.CLIENTE_CON_ASOCIACION);
                     return respuesta;
                 }
                 int filas = conexionBD.delete("cliente.eliminar-cliente", idCliente);

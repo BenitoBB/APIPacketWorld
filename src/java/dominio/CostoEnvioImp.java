@@ -1,6 +1,7 @@
 package dominio;
 
 import dto.RSCostoEnvio;
+import utilidades.Mensajes;
 
 public class CostoEnvioImp {
 
@@ -38,11 +39,11 @@ public class CostoEnvioImp {
             respuesta.setPaquetes(paquetes);
             respuesta.setCostoTotal(total);
             respuesta.setError(false);
-            respuesta.setMensaje("Costo calculado correctamente");
+            respuesta.setMensaje(Mensajes.COSTO_CALCULADO);
 
         } catch (Exception e) {
             respuesta.setError(true);
-            respuesta.setMensaje("Error al calcular costo: " + e.getMessage());
+            respuesta.setMensaje(Mensajes.COSTO_ERROR + e.getMessage());
         }
 
         return respuesta;

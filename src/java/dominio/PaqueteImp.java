@@ -46,15 +46,15 @@ public class PaqueteImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Paquete registrado correctamente.");
+                    respuesta.setMensaje(Mensajes.PAQUETE_REGISTRADO);
                     respuesta.setPaquete(paquete);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo registrar el paquete.");
+                    respuesta.setMensaje(Mensajes.PAQUETE_NO_REGISTRADO);
                 }
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al registrar paquete: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.PAQUETE_ERROR_REGISTRAR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
@@ -79,15 +79,15 @@ public class PaqueteImp {
 
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Paquete actualizado correctamente.");
+                    respuesta.setMensaje(Mensajes.PAQUETE_ACTUALIZADO);
                     respuesta.setPaquete(paquete);
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo actualizar el paquete.");
+                    respuesta.setMensaje(Mensajes.PAQUETE_NO_ACTUALIZADO);
                 }
             } catch (Exception ex) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al actualizar paquete: " + ex.getMessage());
+                respuesta.setMensaje(Mensajes.PAQUETE_ERROR_ACTUALIZAR + ex.getMessage());
             } finally {
                 conexionBD.close();
             }
@@ -138,12 +138,12 @@ public class PaqueteImp {
                 sesion.commit();
 
                 respuesta.setError(false);
-                respuesta.setMensaje("Paquete eliminado correctamente.");
+                respuesta.setMensaje(Mensajes.PAQUETE_ELIMINADO);
 
             } catch (Exception e) {
                 sesion.rollback();
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al eliminar paquete: " + e.getMessage());
+                respuesta.setMensaje(Mensajes.PAQUETE_ERROR_ELIMINAR + e.getMessage());
             } finally {
                 sesion.close();
             }
@@ -171,16 +171,16 @@ public class PaqueteImp {
                     sesion.commit();
 
                     r.setError(false);
-                    r.setMensaje("Paquete asignado al envío correctamente.");
+                    r.setMensaje(Mensajes.PAQUETE_ASIGNADO);
                 } else {
                     r.setError(true);
-                    r.setMensaje("No se pudo asignar el paquete al envío.");
+                    r.setMensaje(Mensajes.PAQUETE_N0_ASIGNADO);
                 }
 
             } catch (Exception e) {
                 sesion.rollback();
                 r.setError(true);
-                r.setMensaje("Error al asignar paquete: " + e.getMessage());
+                r.setMensaje(Mensajes.PAQUERE_ERROR_ASIGNAR + e.getMessage());
             } finally {
                 sesion.close();
             }
@@ -217,15 +217,15 @@ public class PaqueteImp {
 
                 if (filas > 0) {
                     r.setError(false);
-                    r.setMensaje("Paquete desasignado del envío correctamente.");
+                    r.setMensaje(Mensajes.PAQUETE_DESASIGNADO);
                 } else {
                     r.setError(true);
-                    r.setMensaje("No se pudo desasignar el paquete.");
+                    r.setMensaje(Mensajes.PAQUETE_NO_DESASIGNADO);
                 }
 
             } catch (Exception e) {
                 r.setError(true);
-                r.setMensaje("Error al desasignar paquete: " + e.getMessage());
+                r.setMensaje(Mensajes.PAQUETE_ERROR_ASIGNAR + e.getMessage());
             } finally {
                 sesion.close();
             }

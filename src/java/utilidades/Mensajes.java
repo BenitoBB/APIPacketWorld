@@ -23,6 +23,8 @@ public class Mensajes {
 
     public static final String CLIENTE_CORREO_DUPLICADO = "El correo ya está registrado.";
     public static final String CLIENTE_TELEFONO_DUPLICADO = "El teléfono ya está registrado.";
+    public static final String CLIENTE_CON_ASOCIACION = "No se puede eliminar el cliente porque tiene envíos asociados.\n"
+                            + "Elimine primero los envíos o reasigne el cliente.";
 
     // COLABORADOR
     public static final String COLABORADOR_LOGUEADO = "Autenticación correcta. Bienvenid@ ";
@@ -41,6 +43,15 @@ public class Mensajes {
     public static final String COLABORADOR_DUP_CURP = "La CURP ya está registrada.";
     public static final String COLABORADOR_DUP_CORREO = "El correo ya está registrado.";
     public static final String COLABORADOR_DUP_NUM_LICENCIA = "El número de licencia ya está registrado.";
+    public static final String COLABORADOR_PERFIL_OBTENIDO = "Datos de perfil obtenidos correctamente.";
+    public static final String COLABORADOR_NO_ENCONTRADO = "Error: Colaborador no encontrado.";
+    public static final String COLABORADOR_ERROR_BUSCAR = "Error interno del servidor al buscar el perfil: ";
+    
+    // CONDUCTOR
+    public static final String CONDUCTOR_ERROR_ASIGNACION = "Error al asignar conductor.";
+    public static final String CONDUCTOR_ERROR_DESASIGNACION = "Error al desasignar conductor.";
+    public static final String CONDUCTOR_DESASIGNADO = "Conductor desasignado correctamente.";
+    public static final String CONDUCTOR_NO_DESASIGNADO = "No se pudo desasignar el conductor.";
 
     // DIRECCION 
     public static final String DIRECCION_REGISTRADA = "Dirección registrada correctamente.";
@@ -62,6 +73,8 @@ public class Mensajes {
     public static final String SUCURSAL_ENCONTRADA = "Sucursal encontrada.";
     public static final String SUCURSAL_NO_ENCONTRADA = "No existe la sucursal solicitada.";
     public static final String SUCURSAL_ERROR = "Error en operación de sucursal: ";
+    
+    public static final String SUCURSAL_CODIGO_EN_USO = "El código de la sucursal ya está en uso. Intenta con otro.";
 
     // UNIDAD 
     public static final String UNIDAD_REGISTRADA = "Unidad registrada correctamente.";
@@ -86,6 +99,23 @@ public class Mensajes {
     public static final String ASIGNACION_ERROR = "Error en asignación/desasignación de unidad: ";
     public static final String ASIGNACION_EXISTE = "El conductor ya tiene una unidad asignada.";
     public static final String ASIGNACION_NO_EXISTE = "No se encontró la asignación.";
+    
+    // PAQUETES
+    public static final String PAQUETE_REGISTRADO = "Paquete registrado correctamente.";
+    public static final String PAQUETE_NO_REGISTRADO = "No se pudo registrar el paquete.";
+    public static final String PAQUETE_ERROR_REGISTRAR = "Error al registrar paquete: ";
+    public static final String PAQUETE_ACTUALIZADO = "Paquete actualizado correctamente.";
+    public static final String PAQUETE_NO_ACTUALIZADO = "No se pudo actualizar el paquete.";
+    public static final String PAQUETE_ERROR_ACTUALIZAR = "Error al actualizar paquete: ";
+    public static final String PAQUETE_ELIMINADO = "Paquete eliminado correctamente.";
+    public static final String PAQUETE_ERROR_ELIMINAR = "Error al eliminar paquete: ";
+    public static final String PAQUETE_ASIGNADO = "Paquete asignado al envío correctamente.";
+    public static final String PAQUETE_N0_ASIGNADO = "No se pudo asignar el paquete al envío.";
+    public static final String PAQUERE_ERROR_ASIGNAR = "Error al asignar paquete: ";
+    public static final String PAQUETE_DESASIGNADO = "Paquete desasignado del envío correctamente.";
+    public static final String PAQUETE_NO_DESASIGNADO = "No se pudo desasignar el paquete.";
+    public static final String PAQUETE_ERROR_ASIGNAR = "Error al desasignar paquete: ";
+    
 
     // ENVÍO
     public static final String ENVIO_REGISTRADO = "Envío registrado correctamente.";
@@ -96,4 +126,10 @@ public class Mensajes {
     public static final String ENVIO_DATOS_INCOMPLETOS = "Datos incompletos (Guía, Estatus o Colaborador).";
     public static final String ENVIO_ACTUALIZADO = "Envío actualizado correctamente.";
     public static final String ENVIO_NO_ACTUALIZADO = "No se pudo actualizar el envío.";
+    
+    public static final String ENVIO_COMENTARIO_OBLIGATORIO = "El comentario (motivo) es obligatorio para el estatus Detenido o Cancelado.";
+    
+    // COSTO ENVÍO
+    public static final String COSTO_CALCULADO = "Costo calculado correctamente";
+    public static final String COSTO_ERROR = "Error al calcular costo: ";
 }

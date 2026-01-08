@@ -114,7 +114,7 @@ public class EnvioImp {
                 String comentario = solicitud.getComentario();
                 if (comentario == null || comentario.trim().isEmpty()) {
                     respuesta.setMensaje(
-                            Mensajes.ENVIO_ERROR_VALIDACION + "El comentario (motivo) es obligatorio para el estatus Detenido o Cancelado.");
+                            Mensajes.ENVIO_ERROR_VALIDACION + Mensajes.ENVIO_COMENTARIO_OBLIGATORIO);
                     return respuesta;
                 }
             }
@@ -205,7 +205,7 @@ public class EnvioImp {
 
             if (envio.getIdDireccion() == null) {
                 conexionBD.rollback();
-                respuesta.setMensaje("No se pudo registrar la dirección");
+                respuesta.setMensaje(Mensajes.DIRECCION_NO_REGISTRADA);
                 return respuesta;
             }
 
@@ -287,7 +287,7 @@ public class EnvioImp {
         } catch (Exception e) {
             conexion.rollback();
             r.setError(true);
-            r.setMensaje("Error al asignar conductor");
+            r.setMensaje(Mensajes.CONDUCTOR_ERROR_ASIGNACION);
         } finally {
             conexion.close();
         }
@@ -315,15 +315,15 @@ public class EnvioImp {
 
             if (filas > 0) {
                 r.setError(false);
-                r.setMensaje("Conductor desasignado correctamente");
+                r.setMensaje(Mensajes.CONDUCTOR_DESASIGNADO);
             } else {
-                r.setMensaje("No se pudo desasignar el conductor");
+                r.setMensaje(Mensajes.CONDUCTOR_NO_DESASIGNADO);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             conexion.rollback();
-            r.setMensaje("Error al desasignar conductor");
+            r.setMensaje(Mensajes.CONDUCTOR_ERROR_DESASIGNACION);
         } finally {
             conexion.close();
         }

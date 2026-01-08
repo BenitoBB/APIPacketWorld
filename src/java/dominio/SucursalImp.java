@@ -44,7 +44,7 @@ public class SucursalImp {
                 // VALIDACIÓN DE NEGOCIO
                 if (existeCodigo(sucursal.getCodigo())) {
                     respuesta.setError(true);
-                    respuesta.setMensaje("El código de la sucursal ya está en uso. Intenta con otro.");
+                    respuesta.setMensaje(Mensajes.SUCURSAL_CODIGO_EN_USO);
                     return respuesta;
                 }
                 
@@ -111,7 +111,7 @@ public class SucursalImp {
         } catch (Exception e) {
             e.printStackTrace();
             respuesta.setError(true);
-            respuesta.setMensaje("Error en la operación de sucursal");
+            respuesta.setMensaje(Mensajes.SUCURSAL_ERROR + e.getMessage());
         }
 
         return respuesta;
