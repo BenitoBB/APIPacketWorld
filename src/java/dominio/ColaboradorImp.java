@@ -33,7 +33,7 @@ public class ColaboradorImp {
         return lista;
     }
 
-    // Login
+    // Login - Todos
     public static RSColaborador autenticarAdministracion(String noPersonal, String password) {
         RSColaborador respuesta = new RSColaborador();
         SqlSession conexionBD = MyBatisUtil.getSession();
@@ -53,6 +53,58 @@ public class ColaboradorImp {
                     respuesta.setError(false);
                     respuesta.setMensaje(Mensajes.COLABORADOR_LOGUEADO + colaborador.getNombre());
                     respuesta.setColaborador(colaborador);
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(Mensajes.COLABORADOR_ERROR_CREDENCIALES);
+                }
+
+            } catch (Exception ex) {
+                respuesta.setError(true);
+                respuesta.setMensaje(Mensajes.COLABORADOR_ERROR + ex.getMessage());
+            } finally {
+                conexionBD.close(); // Cerramos la sesión siempre
+            }
+
+        } else {
+            // Sin conexión
+            respuesta.setError(true);
+            respuesta.setMensaje(Mensajes.SIN_CONEXION);
+        }
+
+        return respuesta;
+    }
+
+    // LOGIN ADMIN - EJECUTIVO
+    public static RSColaborador autenticarAdminYEjecutivo(String noPersonal, String password) {
+        RSColaborador respuesta = new RSColaborador();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                // Creamos los parámetros para el mapper
+                HashMap<String, String> parametros = new LinkedHashMap<>();
+                parametros.put("noPersonal", noPersonal);
+                parametros.put("password", password);
+
+                // Llamada al mapper usando la variable colaborador
+                Colaborador colaborador = conexionBD.selectOne("colaborador.login-colaborador", parametros);
+
+                if (colaborador != null) {
+
+                    // Regla de negocio: Conductores no pueden entrar a FX
+                    if (colaborador.getIdRol() == 3) {
+                        respuesta.setError(true);
+                        respuesta.setMensaje(Mensajes.COLABORADOR_ACCESO_DENEGADO);
+                        return respuesta;
+                    }
+
+                    // Roles permitidos (Admin y Ejecutivo)
+                    respuesta.setError(false);
+                    respuesta.setMensaje(
+                            Mensajes.COLABORADOR_LOGUEADO + colaborador.getNombre()
+                    );
+                    respuesta.setColaborador(colaborador);
+
                 } else {
                     respuesta.setError(true);
                     respuesta.setMensaje(Mensajes.COLABORADOR_ERROR_CREDENCIALES);
@@ -615,4 +667,21 @@ public class ColaboradorImp {
         return existe;
     }
 
+    public static boolean sucursalTieneColaboradores(int idSucursal) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean tiene = false;
+
+        if (conexionBD != null) {
+            try {
+                Integer total = conexionBD.selectOne(
+                        "colaborador.contar-colaboradores-por-sucursal",
+                        idSucursal
+                );
+                tiene = total != null && total > 0;
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return tiene;
+    }
 }

@@ -30,7 +30,7 @@ public class ColaboradorWS {
         return ColaboradorImp.obtenerColaboradoresTabla();
     }
 
-    // Login
+    // Login todos
     @Path("login")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -41,6 +41,21 @@ public class ColaboradorWS {
         if (noPersonal != null && !noPersonal.isEmpty()
                 && (password != null && !password.isEmpty())) {
             return ColaboradorImp.autenticarAdministracion(noPersonal, password);
+        }
+        throw new BadRequestException();
+    }
+    
+    // Login Admin y Ejecutivo
+    @Path("login-admin")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RSColaborador autenticacionAdminYEjecutivo(
+            @FormParam("noPersonal") String noPersonal,
+            @FormParam("password") String password) {
+        if (noPersonal != null && !noPersonal.isEmpty()
+                && (password != null && !password.isEmpty())) {
+            return ColaboradorImp.autenticarAdminYEjecutivo(noPersonal, password);
         }
         throw new BadRequestException();
     }

@@ -2,7 +2,6 @@ package dominio;
 
 import dto.RSActualizarEstatus;
 import dto.RSEnvio;
-import dto.RSCostoEnvio;
 import dto.RSEnvioDetalle;
 import dto.RSEnvioLista;
 import dto.RSEnvioTabla;
@@ -366,6 +365,24 @@ public class EnvioImp {
         return tiene;
     }
 
+    public static boolean clienteTieneEnviosActivos(int idCliente) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean tiene = false;
+
+        if (conexionBD != null) {
+            try {
+                Integer count = conexionBD.selectOne(
+                        "envio.contar-envios-activos-por-cliente",
+                        idCliente
+                );
+                tiene = count != null && count > 0;
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return tiene;
+    }
+
     public static Respuesta recalcularCostoEnvio(int idEnvio) {
         Respuesta r = new Respuesta();
         SqlSession session = MyBatisUtil.getSession();
@@ -419,11 +436,29 @@ public class EnvioImp {
 
         return r;
     }
- 
+
     public static Integer obtenerIdEnvioPorGuia(String numeroGuia) {
         try (SqlSession s = MyBatisUtil.getSession()) {
             return s.selectOne("envio.obtener-idEnvio-por-guia", numeroGuia);
         }
+    }
+
+    public static boolean sucursalTieneEnviosActivos(int idSucursal) {
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        boolean tiene = false;
+
+        if (conexionBD != null) {
+            try {
+                Integer total = conexionBD.selectOne(
+                        "envio.contar-envios-activos-por-sucursal",
+                        idSucursal
+                );
+                tiene = total != null && total > 0;
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return tiene;
     }
 
 }

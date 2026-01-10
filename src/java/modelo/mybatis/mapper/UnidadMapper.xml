@@ -7,7 +7,7 @@
 <mapper namespace="unidad">
 
     <!-- ====================================================== -->
-    <!-- OBTENER TODAS LAS UNIDADES                              -->
+    <!-- OBTENER TODAS LAS UNIDADES                             -->
     <!-- ====================================================== -->
     <select id="obtener-todas" resultType="pojo.Unidad">
         SELECT *   

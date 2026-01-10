@@ -269,4 +269,8 @@ public class UnidadImp {
             conexionBD.close();
         }
     }
+
+    public static boolean puedeDarseDeBaja(Integer idUnidad) {
+        return !ConductorUnidadImp.unidadTieneConductorActivo(idUnidad);
+    }
 }

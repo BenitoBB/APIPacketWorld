@@ -304,6 +304,17 @@
         WHERE idClienteRemitente = #{idCliente}
     </select>
     
+    <select id="contar-envios-activos-por-cliente"
+            parameterType="int"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM Envio e 
+        JOIN Estatus s ON e.idEstatus = s.idEstatus 
+        WHERE e.idClienteRemitente = #{idCliente} 
+        AND s.nombre NOT IN ('Entregado', 'Cancelado') 
+    </select>
+
+    
     <!-- ================================ -->
     <!-- OBTENER CP ORIGEN Y DESTINO      -->
     <!-- ================================ -->
@@ -326,6 +337,20 @@
         SET costo = #{costo} 
         WHERE idEnvio = #{idEnvio} 
     </update>
+    
+    <!-- ====================================================== -->
+    <!-- VALIDAR ENVÍOS ACTIVOS POR SUCURSAL ORIGEN             -->
+    <!-- ====================================================== -->
+    <select id="contar-envios-activos-por-sucursal"
+            parameterType="int"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM Envio e 
+        JOIN Estatus s ON e.idEstatus = s.idEstatus 
+        WHERE e.idSucursalOrigen = #{idSucursal} 
+        AND s.nombre NOT IN ('Entregado', 'Cancelado') 
+    </select>
+
 
 </mapper>
 

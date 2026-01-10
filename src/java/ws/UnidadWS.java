@@ -27,7 +27,7 @@ public class UnidadWS {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Unidad> obtenerTodas() {
-        return UnidadImp.obtenerTodas(); 
+        return UnidadImp.obtenerTodas();
     }
 
     // Insertar Unidad
@@ -96,4 +96,20 @@ public class UnidadWS {
     public Unidad buscarPorNII(@PathParam("nii") String nii) {
         return UnidadImp.buscarPorNII(nii);
     }
+
+    @Path("puede-baja/{idUnidad}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta puedeDarseDeBaja(@PathParam("idUnidad") Integer idUnidad) {
+        Respuesta r = new Respuesta();
+
+        if (UnidadImp.puedeDarseDeBaja(idUnidad)) {
+            r.setError(false);
+        } else {
+            r.setError(true);
+            r.setMensaje("La unidad tiene un conductor asignado.");
+        }
+        return r;
+    }
+
 }

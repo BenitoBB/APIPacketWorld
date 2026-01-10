@@ -166,7 +166,7 @@ public class ClienteImp {
 
             try {
                 // VALIDAR RELACIONES
-                if (EnvioImp.clienteTieneEnvios(idCliente)) {
+                if (EnvioImp.clienteTieneEnviosActivos(idCliente)) {
                     respuesta.setError(true);
                     respuesta.setMensaje(Mensajes.CLIENTE_CON_ASOCIACION);
                     return respuesta;

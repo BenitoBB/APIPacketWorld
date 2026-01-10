@@ -23,11 +23,12 @@ public class Mensajes {
 
     public static final String CLIENTE_CORREO_DUPLICADO = "El correo ya está registrado.";
     public static final String CLIENTE_TELEFONO_DUPLICADO = "El teléfono ya está registrado.";
-    public static final String CLIENTE_CON_ASOCIACION = "No se puede eliminar el cliente porque tiene envíos asociados.\n"
-                            + "Elimine primero los envíos o reasigne el cliente.";
+    public static final String CLIENTE_CON_ASOCIACION = "No se puede eliminar el cliente porque tiene envíos activos en proceso.\n"
+                            + "Espere a que los envíos sean entregados o cancelados para continuar.";
 
     // COLABORADOR
     public static final String COLABORADOR_LOGUEADO = "Autenticación correcta. Bienvenid@ ";
+    public static final String COLABORADOR_ACCESO_DENEGADO = "Acceso denegado. Los colaboradores con rol Conductor deben usar la aplicación móvil.";
     public static final String COLABORADOR_REGISTRADO = "Colaborador registrado correctamente.";
     public static final String COLABORADOR_NO_REGISTRADO = "No se pudo registrar el colaborador.";
     public static final String COLABORADOR_ACTUALIZADO = "Colaborador actualizado correctamente.";

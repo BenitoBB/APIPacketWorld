@@ -264,7 +264,14 @@
         AND idColaborador != #{idColaborador}
     </select>
 
-
-
-
+    <!-- ====================================================== -->
+    <!-- CONTAR COLABORADORES POR SUCURSAL                      -->
+    <!-- ====================================================== -->
+    <select id="contar-colaboradores-por-sucursal"
+            parameterType="int"
+            resultType="int">
+        SELECT COUNT(*) 
+        FROM Colaborador 
+        WHERE idSucursal = #{idSucursal} 
+    </select>
 </mapper>

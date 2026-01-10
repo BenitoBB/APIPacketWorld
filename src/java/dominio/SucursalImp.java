@@ -47,7 +47,7 @@ public class SucursalImp {
                     respuesta.setMensaje(Mensajes.SUCURSAL_CODIGO_EN_USO);
                     return respuesta;
                 }
-                
+
                 Direccion direccion = sucursal.getDireccion();
                 conexionBD.insert("direccion.insertar", direccion);
 
@@ -125,6 +125,25 @@ public class SucursalImp {
         if (conexionBD != null) {
             try {
 
+                // 1. VALIDACIÓN DE NEGOCIO: ENVÍOS ACTIVOS
+                if (EnvioImp.sucursalTieneEnviosActivos(idSucursal)) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(
+                            "No se puede dar de baja la sucursal porque tiene envíos activos en proceso."
+                    );
+                    return respuesta;
+                }
+
+                // 2. VALIDAR COLABORADORES ASIGNADOS
+                if (ColaboradorImp.sucursalTieneColaboradores(idSucursal)) {
+                    respuesta.setError(true);
+                    respuesta.setMensaje(
+                            "No se puede dar de baja la sucursal porque tiene colaboradores asignados."
+                    );
+                    return respuesta;
+                }
+
+                // 3. BAJA NORMAL 
                 int filas = conexionBD.update("sucursal.dar-de-baja-sucursal", idSucursal);
                 conexionBD.commit();
 
