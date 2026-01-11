@@ -276,22 +276,6 @@
         JOIN Envio e ON e.idEnvio = p.idEnvio
         WHERE e.numeroGuia = #{numeroGuia}
     </select>
-    
-    <!-- ================================ -->
-    <!-- RECALCULAR COSTO DEL ENVÍO       -->
-    <!-- ================================ -->
-    <update id="recalcular-costo" parameterType="int">
-        UPDATE Envio 
-        SET costo = 
-        ( 
-        SELECT IFNULL(SUM( 
-        (p.peso * 10) + (p.alto * p.ancho * p.profundidad * 0.01) 
-        ), 0) 
-        FROM Paquete p 
-        WHERE p.idEnvio = #{value} 
-        ) 
-        WHERE idEnvio = #{value} 
-    </update>
 
     <!-- ====================================================== -->
     <!-- VALIDAR RELACION CLIENTE-ENVIO                         -->

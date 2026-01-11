@@ -14,24 +14,7 @@ public class CostoEnvioImp {
 
         try {
             double distancia = DistanciaImp.obtenerDistancia(cpOrigen, cpDestino);
-
-            double costoKm;
-            if (distancia <= 200) costoKm = 4.0;
-            else if (distancia <= 500) costoKm = 3.0;
-            else if (distancia <= 1000) costoKm = 2.0;
-            else if (distancia <= 2000) costoKm = 1.0;
-            else costoKm = 0.5;
-
-            double costoPaquetes;
-            switch (paquetes) {
-                case 1: costoPaquetes = 0; break;
-                case 2: costoPaquetes = 50; break;
-                case 3: costoPaquetes = 80; break;
-                case 4: costoPaquetes = 110; break;
-                default: costoPaquetes = 150;
-            }
-
-            double total = (distancia * costoKm) + costoPaquetes;
+            double total = calcularCostoEnvio(distancia, paquetes);
 
             respuesta.setCpOrigen(cpOrigen);
             respuesta.setCpDestino(cpDestino);
@@ -47,5 +30,45 @@ public class CostoEnvioImp {
         }
 
         return respuesta;
+    }
+
+    // Costo por kilómetro según distancia
+    public static double obtenerCostoPorKm(double km) {
+        if (km <= 200) {
+            return 4.0;
+        }
+        if (km <= 500) {
+            return 3.0;
+        }
+        if (km <= 1000) {
+            return 2.0;
+        }
+        if (km <= 2000) {
+            return 1.0;
+        }
+        return 0.5;
+    }
+
+    // Costo adicional por paquetes
+    public static double obtenerCostoPorPaquetes(int paquetes) {
+        switch (paquetes) {
+            case 1:
+                return 0;
+            case 2:
+                return 50;
+            case 3:
+                return 80;
+            case 4:
+                return 110;
+            default:
+                return paquetes >= 5 ? 150 : 0;
+        }
+    }
+
+    // Fórmula final
+    public static double calcularCostoEnvio(double distanciaKm, int paquetes) {
+        double costoKm = obtenerCostoPorKm(distanciaKm);
+        double total = (distanciaKm * costoKm) + obtenerCostoPorPaquetes(paquetes);
+        return Math.round(total * 100.0) / 100.0;
     }
 }

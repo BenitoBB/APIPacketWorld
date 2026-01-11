@@ -132,7 +132,7 @@ public class PaqueteImp {
                 int filas = sesion.delete("paquete.eliminar-paquete", idPaquete);
 
                 if (filas > 0 && idEnvio != null) {
-                    sesion.update("envio.recalcular-costo", idEnvio);
+                    EnvioImp.recalcularCostoEnvio(idEnvio);
                 }
 
                 sesion.commit();
@@ -164,14 +164,27 @@ public class PaqueteImp {
                 params.put("idPaquete", idPaquete);
                 params.put("idEnvio", idEnvio);
 
+                // CANTIDAD DE PAQUETES ASIGNADAS AL ENVIO
+                Integer totalAntes = sesion.selectOne(
+                        "paquete.contar-por-envio",
+                        idEnvio
+                );
+
                 int filas = sesion.update("paquete.asignar-envio", params);
 
                 if (filas > 0) {
-                    sesion.update("envio.recalcular-costo", idEnvio);
+                    EnvioImp.recalcularCostoEnvio(idEnvio);
                     sesion.commit();
 
                     r.setError(false);
-                    r.setMensaje(Mensajes.PAQUETE_ASIGNADO);
+
+                    if (totalAntes != null && totalAntes == 0) {
+                        r.setMensaje(
+                                "Primer paquete asignado. El costo del envío se calcula automáticamente con base en la distancia."
+                        );
+                    } else {
+                        r.setMensaje(Mensajes.PAQUETE_ASIGNADO);
+                    }
                 } else {
                     r.setError(true);
                     r.setMensaje(Mensajes.PAQUETE_N0_ASIGNADO);
@@ -210,7 +223,7 @@ public class PaqueteImp {
                         idPaquete
                 );
                 if (idEnvio != null) {
-                    sesion.update("envio.recalcular-costo", idEnvio);
+                    EnvioImp.recalcularCostoEnvio(idEnvio);
                 }
 
                 sesion.commit();

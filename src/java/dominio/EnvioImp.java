@@ -238,14 +238,41 @@ public class EnvioImp {
         }
 
         try {
+            // Obtener ID del envío
+            Integer idEnvio = conexionBD.selectOne(
+                    "envio.obtener-idEnvio-por-guia",
+                    envio.getNumeroGuia()
+            );
+
             int filasEnvio = conexionBD.update("envio.actualizar-envio", envio);
             int filasDireccion = 0;
+
+            boolean cpCambio = false;
+
             if (envio.getCalle() != null) {
-                filasDireccion = conexionBD.update(
-                        "envio.actualizar-direccion-envio", envio
+
+                // Obtener CP anterior
+                String cpAnterior = conexionBD.selectOne(
+                        "envio.obtener-cp-destino",
+                        idEnvio
                 );
+
+                filasDireccion = conexionBD.update(
+                        "envio.actualizar-direccion-envio",
+                        envio
+                );
+
+                cpCambio = cpAnterior != null
+                        && !cpAnterior.equals(envio.getCodigoPostal());
             }
+
             if (filasEnvio > 0 || filasDireccion > 0) {
+
+                // REGLA CLAVE
+                if (cpCambio) {
+                    EnvioImp.recalcularCostoEnvio(idEnvio);
+                }
+
                 conexionBD.commit();
                 respuesta.setError(false);
                 respuesta.setMensaje(Mensajes.ENVIO_ACTUALIZADO);
@@ -255,7 +282,6 @@ public class EnvioImp {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
             conexionBD.rollback();
             respuesta.setMensaje(Mensajes.ERROR_DESCONOCIDO);
         } finally {
@@ -416,7 +442,7 @@ public class EnvioImp {
             );
 
             // 4. Cálculo
-            double costo = Validaciones.calcularCostoEnvio(km, paquetes);
+            double costo = CostoEnvioImp.calcularCostoEnvio(km, paquetes);
 
             // 5. Actualizar envío
             HashMap<String, Object> params = new HashMap<>();

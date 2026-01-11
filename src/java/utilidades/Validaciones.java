@@ -5,7 +5,7 @@ package utilidades;
  * @author benit
  */
 public class Validaciones {
-
+/*
     // Costo por kilómetro según distancia
     public static double obtenerCostoPorKm(double km) {
         if (km <= 200) {
@@ -45,5 +45,5 @@ public class Validaciones {
         double total = (distanciaKm * costoKm) + obtenerCostoPorPaquetes(paquetes);
         return Math.round(total * 100.0) / 100.0;
     }
-
+*/
 }
